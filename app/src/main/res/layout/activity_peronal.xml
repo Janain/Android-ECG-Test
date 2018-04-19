@@ -1,0 +1,249 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.ToolBar"
+        app:popupTheme="@style/OverflowMenuStyle"
+        app:title="个人信息" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="年龄" />
+
+            <EditText
+                android:id="@+id/ecg_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="18" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身高" />
+
+            <EditText
+                android:id="@+id/ecg_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="180cm" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="姓名" />
+
+            <EditText
+                android:id="@+id/ecg_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Janain" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="性别（男、女、保密）" />
+
+            <EditText
+                android:id="@+id/ecg_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="女" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="体重" />
+
+            <EditText
+                android:id="@+id/wcg_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="70kg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电话号码" />
+
+            <EditText
+                android:id="@+id/ecg_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10000000000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份证号码" />
+
+            <EditText
+                android:id="@+id/ecg_cid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="000111222333444555" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="种族" />
+
+            <EditText
+                android:id="@+id/ecg_race"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="苗族" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="采样速率：" />
+
+            <Spinner
+                android:id="@+id/ecg_sample_speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/sample_speed"
+                android:padding="4dp">
+
+            </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="#7f7e7e" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="增益：" />
+
+            <Spinner
+                android:id="@+id/ecg_gain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/gain"
+                android:padding="4dp">
+
+            </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="#7f7e7e" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="病人类型：" />
+
+            <Spinner
+                android:id="@+id/ecg_paint_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/patient_type"
+                android:padding="4dp">
+
+            </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="#7f7e7e" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="显示导联：" />
+
+            <Spinner
+                android:id="@+id/ecg_display_lines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/display_line"
+                android:padding="4dp">
+
+            </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="#7f7e7e" />
+
+            <TextView
+
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="工作模式：" />
+
+            <Spinner
+                android:id="@+id/ecg_work_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/work_mode"
+                android:padding="4dp">
+
+            </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="#7f7e7e" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="工作参数：" />
+
+            <Spinner
+                android:id="@+id/ecg_work_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/work_data"
+                android:padding="4dp">
+
+            </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="4dp"
+                android:background="#7f7e7e" />
+
+            <Button
+                android:id="@+id/ecg_save"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="20dp"
+                android:text="保存" />
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

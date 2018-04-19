@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.exce.bluetooth">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!--使用蓝牙所需要的权限-->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!--使用扫描和设置蓝牙的权限（申明这一个权限必须申明上面一个权限）-->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!--在 Android 6.0 及以上，还需要打开位置权限。如果应用没有位置权限，蓝牙扫描功能不能使用（其它蓝牙操作例如连接蓝牙设备和写入数据不受影响）-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <!--android:theme="@style/AppTheme.Notitle.FullScreen"-->
+        <!--android:name=".activity.LoginActivity"-->
+        <!--android:name=".activity.TestActivity"-->
+        <!--android:name=".activity.LoginActivity"-->
+
+        <activity
+            android:name=".activity.PersonalActivity"
+            android:persistableMode="persistAcrossReboots"
+            android:theme="@style/AppTheme.Notitle.FullScreen"
+            tools:targetApi="lollipop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.SetActivity" />
+        <activity android:name=".activity.MainTabActivity" />
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.usb.USBActivity" />
+        <activity android:name=".activity.wifi.WIFIActivity" />
+        <!--<activity android:name=".activity.wifi.MainActivity" />-->
+    </application>
+
+</manifest>

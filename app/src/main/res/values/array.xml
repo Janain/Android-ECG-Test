@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sample_speed">
+        <item>360</item>
+        <item>500</item>
+        <item>1000</item>
+    </string-array>
+    <string-array name="display_line">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>自动</item>
+    </string-array>
+    <string-array name="gain">
+        <item>无</item>
+        <item>x1</item>
+        <item>x2</item>
+        <item>x6</item>
+        <item>x4</item>
+        <item>x8</item>
+        <item>x12</item>
+    </string-array>
+    <string-array name="patient_type">
+        <item>ADL:10-300 bpm</item>
+        <item>CHI:10-350 bpm</item>
+        <item>NEO:10-350 bpm</item>
+    </string-array>
+    <string-array name="work_mode">
+        <item>低功耗</item>
+        <item>高增益</item>
+    </string-array>
+    <string-array name="user_id">
+        <item>ID</item>
+        <item>姓名</item>
+        <item>身份证</item>
+        <item>电话号码</item>
+    </string-array>
+    <string-array name="work_data">
+        <item>无</item>
+    </string-array>
+</resources>

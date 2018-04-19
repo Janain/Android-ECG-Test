@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.ToolBar"
+        app:popupTheme="@style/OverflowMenuStyle"
+        app:title="注册" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="8dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/editOpenId_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* openid：" />
+
+            <EditText
+                android:id="@+id/editOpenId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1" />
+
+            <TextView
+                android:id="@+id/editAccountName_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*用户名（手机号或email）" />
+
+            <EditText
+                android:id="@+id/editAccountName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/editName_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*姓名" />
+
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="anonymous" />
+
+            <TextView
+                android:id="@+id/editCId_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="身份证：" />
+
+            <EditText
+                android:id="@+id/editCid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="000111222333444555" />
+
+            <TextView
+                android:id="@+id/editPhone_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电话号码" />
+
+            <EditText
+                android:id="@+id/editPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="13101230001" />
+
+            <TextView
+                android:id="@+id/editSex_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="性别：（男、女、保密）" />
+
+            <EditText
+                android:id="@+id/editSex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="男" />
+            <Button
+                android:id="@+id/register_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="注册" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

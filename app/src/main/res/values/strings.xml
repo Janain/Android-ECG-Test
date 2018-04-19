@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ecg</string>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+    <string name="set">用户配置区</string>
+    <string name="usb_mode">切换USB模式</string>
+    <string name="wifi_mode">切换WIFI模式</string>
+    <string name="start">开始</string>
+    <string name="stop">结束</string>
+    <string name="drift_filtering">漂移滤波：</string>
+    <string name="drift_filtering_005">漂移滤波0.05HZ</string>
+    <string name="drift_filtering_015">漂移滤波0.15HZ</string>
+    <string name="drift_filtering_025">漂移滤波0.25HZ</string>
+    <string name="drift_filtering_05">漂移滤波0.5HZ</string>
+    <string name="emg_filtering">肌电滤波：</string>
+    <string name="emg_filtering_25">肌电滤波25HZ</string>
+    <string name="emg_filtering_35">肌电滤波35HZ</string>
+    <string name="emg_filtering_45">肌电滤波45HZ</string>
+    <string name="power_frequency_filtering">工频滤波：</string>
+    <string name="power_frequency_filtering_50">工频滤波50HZ</string>
+    <string name="power_frequency_filtering_60">工频滤波60HZ</string>
+    <string name="low_pass_filtering">低通滤波：</string>
+    <string name="low_pass_filtering_75">低通滤波75HZ</string>
+    <string name="low_pass_filtering_100">低通滤波100HZ</string>
+    <string name="low_pass_filtering_150">低通滤波150HZ</string>
+</resources>
