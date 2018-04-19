@@ -176,7 +176,6 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
             for (Field f : filed1) {
                 System.out.println("Declared Field----类型 :" + type.getName() + "---成员变量----：" + f.getName());
             }
-
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
