@@ -10,6 +10,15 @@ import java.io.InputStream;
  */
 public class ReadStreamuntils {
     /**
+     * 输出一个int的二进制数
+     *
+     * @param num
+     */
+    private static void printInfo(int num) {
+//        System.out.println("hello,world");
+        System.out.println(Integer.toBinaryString(num));
+    }
+    /**
      * 读取流
      *
      * @param inStream
@@ -44,12 +53,5 @@ public class ReadStreamuntils {
         printInfo(number);//111
     }
 
-    /**
-     * 输出一个int的二进制数
-     *
-     * @param num
-     */
-    private static void printInfo(int num) {
-        System.out.println(Integer.toBinaryString(num));
-    }
+
 }

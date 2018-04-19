@@ -5,6 +5,7 @@ import android.content.Context;
 import com.exce.bluetooth.activity.wifi.Client;
 import com.exce.bluetooth.bean.UserInfo;
 import com.exce.bluetooth.utils.SharedPreferenceUtil;
+import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -95,6 +96,8 @@ public class fanshe   {
                 }
             }
         }
+        Gson gson = new Gson();
+
         return content;
     }
 

@@ -13,12 +13,16 @@ import android.widget.Spinner;
 import com.exce.bluetooth.R;
 import com.exce.bluetooth.bean.UserInfo;
 import com.exce.bluetooth.utils.SharedPreferenceUtil;
-
+import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @Author Wangjj
@@ -69,7 +73,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
     // 初始化参数
     private void initArgs() {
         ui = new UserInfo();
-        ui.age = getInt(getEditTextValue(mAge));
+
         ui.height = "" + getEditTextValue(mHeight);
         ui.userName = "" + getEditTextValue(mUserName);
         ui.sex = getSexValue(getEditTextValue(mSex));
@@ -77,7 +81,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
         ui.phone = "" + getEditTextValue(mPhone);
         ui.cid = "" + getEditTextValue(mCid);
         ui.race = "" + getEditTextValue(mRace);
-        ui.setAge(ui.age)
+        ui.setAge(getInt(getEditTextValue(mAge)))
                 .setHeight(ui.height)
                 .setUserName(ui.userName)
                 .setSex(ui.sex)
@@ -109,7 +113,7 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
         switch (parent.getId()) {
             case R.id.ecg_sample_speed:
                 String[] sampleArr = getResources().getStringArray(R.array.sample_speed);//获取采样速率列表数据
-                ui.setSampleSpeed(sampleArr[position]);
+//                ui.setSampleSpeed(sampleArr[position]);
                 Log.e("onItemSelected: ", "---------sampleArr--------" + sampleArr[position]);
                 break;
             case R.id.ecg_gain:
@@ -150,10 +154,12 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
 
     private void testFanshe() {
         UserInfo ui = SharedPreferenceUtil.getUser(getApplicationContext(), "ecg", "config_msg");
-        byte[] data = mParse(ui);
-        System.out.println("++++++++++++++++++-------------------+++++++++++++++ " + data);
-        System.out.println("++++++++++++++++++-------------------+++++++++++++++ " + data);
-        System.out.println("++++++++++++++++++-------------------+++++++++++++++ " + data);
+        try {
+            String data = mParse(ui);
+            System.out.println("++++++++++++++++++-------------------+++++++++++++++ " + data);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -162,105 +168,48 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
      * @param ui 包装对象
      * @return byte[] 包装后的对象
      */
-    public byte[] mParse(UserInfo ui) {
+
+//        System.out.println("*********" + gson.toJson(ui.sex));
+//        System.out.println("*****666666666****" + gson.toJson(ui.sex.getClass().getTypeParameters()));
+//        ui = new UserInfo().setAge(1).setCid("1q231231");
+    public String mParse(UserInfo ui) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         ui = new UserInfo();
-        Class mClass = ui.getClass();
-        System.out.println("获取ui的类名" + mClass);
-        try {
-            Field field = mClass.getDeclaredField("userName");
-            Field field1 = mClass.getDeclaredField("age");
-            Field field2 = mClass.getDeclaredField("openId");
-            System.out.println("获取ui的成员变量userName" + field + " ," + field1 + "," + field2);
-            Field[] filed1 = mClass.getDeclaredFields();
-            Class type = field1.getType();
-            for (Field f : filed1) {
-                System.out.println("Declared Field----类型 :" + type.getName() + "---成员变量----：" + f.getName());
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        String content = "";
+        Field[] filed = ui.getClass().getDeclaredFields();
+        for (int i = 0; i < filed.length; i++) {
+            Class type = filed[i].getType();
+            Type genericType = filed[i].getGenericType();
+            String name = filed[i].getName();
+            System.out.println("类型 ----:" + type + "---获得通用类型---" + genericType + "---名称----：" + name);
         }
 
-        try {
-            ui = new UserInfo();
-            Class mClass1 = ui.getClass();
-            System.out.println("class的名称" + mClass1.getName());
-            Method[] methods = mClass1.getMethods();
-            System.out.println("获取该类自己声明的方法" + mClass1.getDeclaredMethods());
-            for (int i = 0; i < methods.length; i++) {
-                Class returns = methods[i].getReturnType();
-                System.out.print("得到方法的返回值类型" + returns.getName() + "");
-                System.out.print("便利后的方法名" + methods[i].getName() + "(");
-//                System.out.println("得到返回值参数的类类类型");
-                Class[] classArr = methods[i].getParameterTypes();
-                for (Class class1 :
-                        classArr) {
-                    System.out.print(class1.getName() + ",");
-                }
-                System.out.println(")");
-            }
-
-            Reflect(ui);
-            System.out.println("ui的对象" + Reflect(mClass1));
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return content;
     }
 
 
-    public static String Reflect(Object model)
-            throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Field[] field = model.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
-        String content = "";
-        for (int j = 0; j < field.length; j++) { // 遍历所有属性
-            String name = field[j].getName(); // 获取属性的名字
-            name = name.substring(0, 1).toUpperCase() + name.substring(1); // 将属性的首字符大写，方便构造get，set方法
-            String type = field[j].getGenericType().toString(); // 获取属性的类型
-            if (type.equals("class java.lang.String")) { // 如果type是类类型，则前面包含"class
-                // "，后面跟类名
-                Method m = model.getClass().getMethod("get" + name);
-                String value = (String) m.invoke(model); // 调用getter方法获取属性值
-                if (value != null) {
-                    content += value + "\t";
-                }
-            }
-            if (type.equals("class java.lang.Integer")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Integer value = (Integer) m.invoke(model);
-                if (value != null) {
-                    content += value + "\t";
-                }
-            }
-            if (type.equals("class java.lang.Short")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Short value = (Short) m.invoke(model);
-                if (value != null) {
-                }
-            }
-            if (type.equals("class java.lang.Double")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Double value = (Double) m.invoke(model);
-                if (value != null) {
-                }
-            }
-            if (type.equals("class java.lang.Boolean")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Boolean value = (Boolean) m.invoke(model);
-                if (value != null) {
-                    String cc = value == true ? "1" : "0";
-                    content += cc + "\t";
-                }
-            }
-            if (type.equals("class java.util.Date")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Date value = (Date) m.invoke(model);
-                if (value != null) {
-                    content += value + "\t";
-                    System.out.println(type + "attribute value:" + value.toLocaleString());
-                }
-            }
+    private static Object reflectMethod(Object object) {
+        Field[] field = object.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
+//        Method[] methods = object.getClass().getMethod("")
+        for (int i = 0; i < field.length; i++) {
+            String name = field[i].getName(); // 获取属性的名字
+            field[i].getType();
+
+            field[i].getDeclaringClass();
+
         }
-        return content;
+        List l = new ArrayList();
+        l.add("aa");
+        l.add("bb");
+        l.add("cc");
+
+        Iterator iter = l.iterator();
+        while (iter.hasNext()) {
+            String str = (String) iter.next();
+            System.out.println(str);
+        }
+
+        return null;
+
     }
 
 

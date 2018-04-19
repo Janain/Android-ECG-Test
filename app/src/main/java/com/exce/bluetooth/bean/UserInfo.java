@@ -9,21 +9,21 @@ import java.io.Serializable;
  */
 public class UserInfo implements Serializable {
 
-    public String openId;//账号
-    public int age;//年龄
-    public String height;//身高
-    public String userName;//姓名
-    public UserInfo.SEX sex;//性别
-    public String weight; //体重
-    public String phone;//手机号
-    public String cid;//身份证
-    public String race;//种族
-    public String sampleSpeed;//采样速率
+    private String openId;//账号
+    private int age;//年龄
+    private String height;//身高
+    private String userName;//姓名
+    private UserInfo.SEX sex;//性别
+    private String weight; //体重
+    private String phone;//手机号
+    private String cid;//身份证
+    private String race;//种族
+    private int sampleSpeed;//采样速率
     public String gain;//增益
-    public String patientType;//病人类型
-    public String displayLines;//显示导联
-    public String workMode;//工作模式
-    public String workData;//工作参数
+    private String patientType;//病人类型
+    private String displayLines;//显示导联
+    private String workMode;//工作模式
+    private String workData;//工作参数
 
 
 
@@ -33,7 +33,7 @@ public class UserInfo implements Serializable {
     }
 
     public UserInfo(String openId, int age, String height, String userName, SEX sex,
-                    String weight, String phone, String cid, String race, String sampleSpeed,
+                    String weight, String phone, String cid, String race, int sampleSpeed,
                     String gain, String patientType, String displayLines, String workMode, String workData) {
         this.openId = openId;
         this.age = age;
@@ -145,11 +145,11 @@ public class UserInfo implements Serializable {
         return this;
     }
 
-    public String getSampleSpeed() {
+    public int getSampleSpeed() {
         return sampleSpeed;
     }
 
-    public UserInfo setSampleSpeed(String sampleSpeed) {
+    public UserInfo setSampleSpeed(int sampleSpeed) {
         this.sampleSpeed = sampleSpeed;
         return this;
     }
