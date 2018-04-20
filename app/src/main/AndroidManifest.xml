@@ -37,11 +37,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SetActivity" />
         <activity android:name=".activity.MainTabActivity" />
-        <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.usb.USBActivity" />
-        <activity android:name=".activity.wifi.WIFIActivity" />
         <!--<activity android:name=".activity.wifi.MainActivity" />-->
     </application>
 

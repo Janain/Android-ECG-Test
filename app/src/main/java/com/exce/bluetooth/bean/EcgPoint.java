@@ -6,11 +6,11 @@ package com.exce.bluetooth.bean;
  * @Create 2018/3/29.
  * @Content
  */
-public class Point {
+public class EcgPoint {
     private float x;
     private float y;
 
-    public Point(float x, float y) {
+    public EcgPoint(float x, float y) {
         this.x = x;
         this.y = y;
     }

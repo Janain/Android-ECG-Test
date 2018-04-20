@@ -12,7 +12,7 @@ import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.exce.bluetooth.bean.Point;
+import com.exce.bluetooth.bean.EcgPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,10 +140,10 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     Runnable drawRunnable = new Runnable() {
         @Override
         public void run() {
-            List<Point> lastPoints = new ArrayList<Point>();
+            List<EcgPoint> lastPoints = new ArrayList<EcgPoint>();
             for (int i = 0; i < 12; i++) {
                 float y = (i + 1) * mSGridSize * 15;
-                lastPoints.add(new Point(xLoc * xOffset, y));
+                lastPoints.add(new EcgPoint(xLoc * xOffset, y));
             }
             while (isRunning) {
                 try {
@@ -155,7 +155,7 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
         }
     };
 
-    private void mDraw(List<Point> lastPoints) {
+    private void mDraw(List<EcgPoint> lastPoints) {
         Rect rect = new Rect();
         int leftLoc = (int) (xLoc * xOffset + XOFFSET_BIG);
         int topLoc = 0;
@@ -181,7 +181,7 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
      * @param lastPoints
      * @param count
      */
-    private void drawLines(Canvas mCanvas, List<Point> lastPoints, int count) {
+    private void drawLines(Canvas mCanvas, List<EcgPoint> lastPoints, int count) {
         //画曲线
         for (int i = 0; i < count; i++) {
             float stopX = this.xLoc * this.xOffset + this.XOFFSET_BIG;

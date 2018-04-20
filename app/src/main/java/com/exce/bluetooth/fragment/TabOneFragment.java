@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.exce.bluetooth.R;
 import com.exce.bluetooth.activity.usb.USBActivity;
-import com.exce.bluetooth.activity.wifi.WIFIActivity;
+import com.exce.bluetooth.activity.wifi.MainActivity;
 import com.exce.bluetooth.adapter.DeviceListAdapter;
 import com.exce.bluetooth.bean.UserInfo;
 import com.exce.bluetooth.blueutils.BleController;
@@ -137,15 +137,11 @@ public class TabOneFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getContext(), "settings", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.change_wifi:
-                        Intent intent2 = new Intent(getContext(), WIFIActivity.class);
+                        Intent intent2 = new Intent(getContext(), MainActivity.class);
                         startActivity(intent2);
                         Toast.makeText(getContext(), "settings", Toast.LENGTH_SHORT).show();
                         break;
-//                    case R.id.action_settings:
-//                        Intent intent3 = new Intent(getContext(), SetActivity.class);
-//                        startActivity(intent3);
-//                        Toast.makeText(getContext(), "settings", Toast.LENGTH_SHORT).show();
-//                        break;
+
                     default:
                         break;
                 }
@@ -276,12 +272,12 @@ public class TabOneFragment extends Fragment implements View.OnClickListener {
         byte[] b = null;
         if (type == String.class) {
             b = String.valueOf(obj).getBytes(StandardCharsets.UTF_8);
-        }else if(type == byte.class){
-            b = new byte[]{(byte)obj};
-        }else if(type == short.class){
-            b = Shorts.toByteArray((short)obj);
-        }else if(type == float.class){
-            b = TypeUntils.float2Bytes((float)obj);
+        } else if (type == byte.class) {
+            b = new byte[]{(byte) obj};
+        } else if (type == short.class) {
+            b = Shorts.toByteArray((short) obj);
+        } else if (type == float.class) {
+            b = TypeUntils.float2Bytes((float) obj);
         }
         return b;
     }
