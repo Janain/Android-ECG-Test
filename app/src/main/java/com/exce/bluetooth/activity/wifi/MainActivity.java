@@ -1,13 +1,8 @@
 package com.exce.bluetooth.activity.wifi;
 
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.exce.bluetooth.R;
 import com.exce.bluetooth.view.EcgView;
@@ -15,7 +10,6 @@ import com.google.common.primitives.Shorts;
 
 import java.io.DataInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -91,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
                         // 取协议头
                         byte b;
                         b = dequeue(dataB);
-                        if (b != unsigned(0xaa)) continue;
+                        if (b != unsigned_byte(0xaa)) continue;
                         b = dequeue(dataB);
-                        if (b != unsigned(0xaa)) continue;
+                        if (b != unsigned_byte(0xaa)) continue;
                         // 取总长度
                         for (int i = 0; i < 2; i++) {
                             buffer[i] = dequeue(dataB);
@@ -106,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // 判断协议完整性(判断尾或crc)
-                        if (buffer[len - 2] != unsigned(0x55)) continue;
-                        if (buffer[len - 1] != unsigned(0x55)) continue;
+                        if (buffer[len - 2] != unsigned_byte(0x55)) continue;
+                        if (buffer[len - 1] != unsigned_byte(0x55)) continue;
 
                         // -------------判断帧类型-------------------------
                         // 帧类型
@@ -156,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
      * @param i
      * @return
      */
-    private byte unsigned(int i) {
+    private byte unsigned_byte(int i) {
         if (i > 255 || i < 0) {
             throw new RuntimeException("i 必须在 0x00 - 0xff 之间");
         }

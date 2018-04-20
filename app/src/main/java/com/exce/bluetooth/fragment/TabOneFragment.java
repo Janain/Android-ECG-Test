@@ -3,18 +3,12 @@ package com.exce.bluetooth.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -34,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exce.bluetooth.R;
-import com.exce.bluetooth.activity.SetActivity;
 import com.exce.bluetooth.activity.usb.USBActivity;
 import com.exce.bluetooth.activity.wifi.WIFIActivity;
 import com.exce.bluetooth.adapter.DeviceListAdapter;
@@ -44,27 +37,22 @@ import com.exce.bluetooth.blueutils.callback.ConnectCallback;
 import com.exce.bluetooth.blueutils.callback.OnReceiverCallback;
 import com.exce.bluetooth.blueutils.callback.OnWriteCallback;
 import com.exce.bluetooth.blueutils.callback.ScanCallback;
+import com.exce.bluetooth.utils.MyField;
+import com.exce.bluetooth.utils.MyObjIterator;
 import com.exce.bluetooth.utils.SharedPreferenceUtil;
 import com.exce.bluetooth.utils.TypeUntils;
 import com.exce.bluetooth.view.EcgView;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
 import com.google.common.primitives.Shorts;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -255,73 +243,112 @@ public class TabOneFragment extends Fragment implements View.OnClickListener {
      * @return byte[] 包装后的对象
      */
     public byte[] mParse(UserInfo ui) {
+        MyObjIterator iterator = new MyObjIterator(ui);
 
-        try {
-            Reflect(ui);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        byte[] allIns = null;
+        while (iterator.hasNext()) {
+            MyField field = iterator.next();
+            if (field.getValue() == null) continue;
+            String name = field.getName();
+            byte[] insHead = getInsHead(name); // 指令头
+            byte[] value = objToByte(field.getValue(), field.getType()); // 指令数据
+            short valueLen = (short) value.length;
+            byte[] valueLenBuffer = Shorts.toByteArray(valueLen); // 指令数据长度
+
+            byte[] ins = TypeUntils.byteAppend(insHead, valueLenBuffer, value); // 得到单条指令
+            allIns = TypeUntils.byteAppend(allIns, ins); // 追加指令到指令集合中
         }
-        return null;
+        byte[] head = new byte[]{TypeUntils.unsigned_byte(0xaa), TypeUntils.unsigned_byte(0xaa)}; // 头
+        int allInsLen = (allIns == null) ? 0 : allIns.length;
+        byte[] allLen = Shorts.toByteArray((short) (allInsLen + 3)); // 总长度
+        byte[] type = new byte[]{TypeUntils.unsigned_byte(0x30)}; // 帧类型
+        byte[] end = new byte[]{TypeUntils.unsigned_byte(0x55), TypeUntils.unsigned_byte(0x55)}; // 结束字
+        return TypeUntils.byteAppend(head, allLen, type, allIns, end);
     }
 
 
-    public static String Reflect(Object model)
-            throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Field[] field = model.getClass().getDeclaredFields(); // 获取实体类的所有属性，返回Field数组
-        String content = "";
-        for (int j = 0; j < field.length; j++) { // 遍历所有属性
-            String name = field[j].getName(); // 获取属性的名字
-            name = name.substring(0, 1).toUpperCase() + name.substring(1); // 将属性的首字符大写，方便构造get，set方法
-            String type = field[j].getGenericType().toString(); // 获取属性的类型
-            if (type.equals("class java.lang.String")) { // 如果type是类类型，则前面包含"class
-                // "，后面跟类名
-                Method m = model.getClass().getMethod("get" + name);
-                String value = (String) m.invoke(model); // 调用getter方法获取属性值
-                if (value != null) {
-                    content += value + "\t";
-                }
-            }
-            if (type.equals("class java.lang.Integer")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Integer value = (Integer) m.invoke(model);
-                if (value != null) {
-                    content += value + "\t";
-                }
-            }
-            if (type.equals("class java.lang.Short")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Short value = (Short) m.invoke(model);
-                if (value != null) {
-                }
-            }
-            if (type.equals("class java.lang.Double")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Double value = (Double) m.invoke(model);
-                if (value != null) {
-                }
-            }
-            if (type.equals("class java.lang.Boolean")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Boolean value = (Boolean) m.invoke(model);
-                if (value != null) {
-                    String cc = value == true ? "1" : "0";
-                    content += cc + "\t";
-                }
-            }
-            if (type.equals("class java.util.Date")) {
-                Method m = model.getClass().getMethod("get" + name);
-                Date value = (Date) m.invoke(model);
-                if (value != null) {
-                    content += value + "\t";
-                    System.out.println(type + "attribute value:" + value.toLocaleString());
-                }
-            }
+    /**
+     * 对象转byte数组（自定义）
+     *
+     * @param obj
+     * @param type
+     * @return byte[]
+     */
+    public byte[] objToByte(Object obj, Type type) {
+        byte[] b = null;
+        if (type == String.class) {
+            b = String.valueOf(obj).getBytes(StandardCharsets.UTF_8);
+        }else if(type == byte.class){
+            b = new byte[]{(byte)obj};
+        }else if(type == short.class){
+            b = Shorts.toByteArray((short)obj);
+        }else if(type == float.class){
+            b = TypeUntils.float2Bytes((float)obj);
         }
-        return content;
+        return b;
+    }
+
+    /**
+     * 获取指令头
+     *
+     * @param name
+     * @return 指令
+     */
+    public byte[] getInsHead(String name) {
+        byte[] b = new byte[2];
+        switch (name) {
+            case "openId":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x01);
+                break;
+            case "age":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x02);
+                break;
+            case "height":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x03);
+                break;
+            case "userName":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x04);
+                break;
+            case "sex":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x05);
+                break;
+            case "weight":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x06);
+                break;
+            case "phone":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x07);
+                break;
+            case "cid":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x08);
+                break;
+            case "sampleSpeed":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x0a);
+                break;
+            case "gain":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x0b);
+                break;
+            case "patientType":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x0c);
+                break;
+            case "displayLines":
+                b[0] = TypeUntils.unsigned_byte(0x00);
+                b[1] = TypeUntils.unsigned_byte(0x0d);
+                break;
+            default:
+                throw new RuntimeException("未知的指令名");
+        }
+        return b;
     }
 
 

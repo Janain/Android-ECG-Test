@@ -102,16 +102,6 @@
                 android:layout_height="wrap_content"
                 android:text="000111222333444555" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="种族" />
-
-            <EditText
-                android:id="@+id/ecg_race"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="苗族" />
 
             <TextView
                 android:layout_width="100dp"
@@ -183,47 +173,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/display_line"
-                android:padding="4dp">
-
-            </Spinner>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="4dp"
-                android:background="#7f7e7e" />
-
-            <TextView
-
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="工作模式：" />
-
-            <Spinner
-                android:id="@+id/ecg_work_mode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/work_mode"
-                android:padding="4dp">
-
-            </Spinner>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="4dp"
-                android:background="#7f7e7e" />
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="工作参数：" />
-
-            <Spinner
-                android:id="@+id/ecg_work_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/work_data"
                 android:padding="4dp">
 
             </Spinner>

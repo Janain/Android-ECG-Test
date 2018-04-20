@@ -9,60 +9,22 @@ import java.io.Serializable;
  */
 public class UserInfo implements Serializable {
 
+    public static final byte UNKNOWN = 0;
+    public static final byte BOY = 1;
+    public static final byte GIRL = 2;
+
     private String openId;//账号
-    private int age;//年龄
-    private String height;//身高
+    private byte age;//年龄
+    private float height;//身高
     private String userName;//姓名
-    private UserInfo.SEX sex;//性别
-    private String weight; //体重
+    private byte sex;//性别
+    private float weight; // 体重
     private String phone;//手机号
     private String cid;//身份证
-    private String race;//种族
-    private int sampleSpeed;//采样速率
-    public String gain;//增益
-    private String patientType;//病人类型
-    private String displayLines;//显示导联
-    private String workMode;//工作模式
-    private String workData;//工作参数
-
-
-
-    public UserInfo() {
-        this.sex = UserInfo.SEX.SECRET;
-        this.age = 0;
-    }
-
-    public UserInfo(String openId, int age, String height, String userName, SEX sex,
-                    String weight, String phone, String cid, String race, int sampleSpeed,
-                    String gain, String patientType, String displayLines, String workMode, String workData) {
-        this.openId = openId;
-        this.age = age;
-        this.height = height;
-        this.userName = userName;
-        this.sex = sex;
-        this.weight = weight;
-        this.phone = phone;
-        this.cid = cid;
-        this.race = race;
-        this.sampleSpeed = sampleSpeed;
-        this.gain = gain;
-        this.patientType = patientType;
-        this.displayLines = displayLines;
-        this.workMode = workMode;
-        this.workData = workData;
-    }
-
-    public static enum SEX {
-        SECRET("0"),
-        MALE("1"),
-        FAMALE("2");
-
-        String string = "";
-
-        private SEX(String var3) {
-            this.string = var3;
-        }
-    }
+    private short sampleSpeed;//采样速率
+    public byte gain; //增益
+    private byte patientType;// 病人类型
+    private byte displayLines;// 显示通道 8
 
     public String getOpenId() {
         return openId;
@@ -73,20 +35,20 @@ public class UserInfo implements Serializable {
         return this;
     }
 
-    public int getAge() {
+    public byte getAge() {
         return age;
     }
 
-    public UserInfo setAge(int age) {
+    public UserInfo setAge(byte age) {
         this.age = age;
         return this;
     }
 
-    public String getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public UserInfo setHeight(String height) {
+    public UserInfo setHeight(float height) {
         this.height = height;
         return this;
     }
@@ -100,20 +62,20 @@ public class UserInfo implements Serializable {
         return this;
     }
 
-    public SEX getSex() {
+    public byte getSex() {
         return sex;
     }
 
-    public UserInfo setSex(SEX sex) {
+    public UserInfo setSex(byte sex) {
         this.sex = sex;
         return this;
     }
 
-    public String getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    public UserInfo setWeight(String weight) {
+    public UserInfo setWeight(float weight) {
         this.weight = weight;
         return this;
     }
@@ -136,66 +98,40 @@ public class UserInfo implements Serializable {
         return this;
     }
 
-    public String getRace() {
-        return race;
-    }
-
-    public UserInfo setRace(String race) {
-        this.race = race;
-        return this;
-    }
-
-    public int getSampleSpeed() {
+    public short getSampleSpeed() {
         return sampleSpeed;
     }
 
-    public UserInfo setSampleSpeed(int sampleSpeed) {
+    public UserInfo setSampleSpeed(short sampleSpeed) {
         this.sampleSpeed = sampleSpeed;
         return this;
     }
 
-    public String getGain() {
+    public byte getGain() {
         return gain;
     }
 
-    public UserInfo setGain(String gain) {
+    public UserInfo setGain(byte gain) {
         this.gain = gain;
         return this;
     }
 
-    public String getPatientType() {
+    public byte getPatientType() {
         return patientType;
     }
 
-    public UserInfo setPatientType(String patientType) {
+    public UserInfo setPatientType(byte patientType) {
         this.patientType = patientType;
         return this;
     }
 
-    public String getDisplayLines() {
+    public byte getDisplayLines() {
         return displayLines;
     }
 
-    public UserInfo setDisplayLines(String displayLines) {
+    public UserInfo setDisplayLines(byte displayLines) {
         this.displayLines = displayLines;
         return this;
     }
 
-    public String getWorkMode() {
-        return workMode;
-    }
-
-    public UserInfo setWorkMode(String workMode) {
-        this.workMode = workMode;
-        return this;
-    }
-
-    public String getWorkData() {
-        return workData;
-    }
-
-    public UserInfo setWorkData(String workData) {
-        this.workData = workData;
-        return this;
-    }
 }

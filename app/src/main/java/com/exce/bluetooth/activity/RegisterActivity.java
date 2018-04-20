@@ -49,13 +49,13 @@ public class RegisterActivity extends Activity {
                 Log.i("RegisterActivity", "register----");
 
                 UserInfo ui = new UserInfo();
-                ui.userName = "" + getEditTextValue(etName);
-//                ui.accountName = "" + getEditTextValue(etAccountName); // 可能是手机号或者email
-                ui.openId = "" + getEditTextValue(etOpenId);
-                ui.phone = "" + getEditTextValue(etPhone);
-                ui.cid = "" + getEditTextValue(etCid);
-
-                ui.sex = getSexValue(getEditTextValue(etSex));
+//                ui.userName = "" + getEditTextValue(etName);
+////                ui.accountName = "" + getEditTextValue(etAccountName); // 可能是手机号或者email
+//                ui.openId = "" + getEditTextValue(etOpenId);
+//                ui.phone = "" + getEditTextValue(etPhone);
+//                ui.cid = "" + getEditTextValue(etCid);
+//
+//                ui.sex = getSexValue(getEditTextValue(etSex));
 
             }
         });
