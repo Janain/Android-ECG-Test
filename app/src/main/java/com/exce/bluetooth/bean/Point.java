@@ -1,4 +1,4 @@
-package com.exce.bluetooth.utils;
+package com.exce.bluetooth.bean;
 
 /**
  * 点

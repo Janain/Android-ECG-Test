@@ -69,8 +69,6 @@ public class SharedPreferenceUtil {
     }
 
 
-
-
     public static void saveUser(Context context, String preferenceName, String key, UserInfo user) throws Exception {
         if (user instanceof Serializable) {
             SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceName, context.MODE_PRIVATE);
@@ -91,81 +89,21 @@ public class SharedPreferenceUtil {
     }
 
 
-
-
-
-    public static UserInfo getUser(Context context, String preferenceName,String key) {
-        SharedPreferences sharedPreferences=context.getSharedPreferences(preferenceName,context.MODE_PRIVATE);
+    public static UserInfo getUser(Context context, String preferenceName, String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceName, context.MODE_PRIVATE);
         String temp = sharedPreferences.getString(key, "");
-        ByteArrayInputStream bais =  new ByteArrayInputStream(Base64.decode(temp.getBytes(), Base64.DEFAULT));
+        ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(temp.getBytes(), Base64.DEFAULT));
         UserInfo user = null;
         try {
             ObjectInputStream ois = new ObjectInputStream(bais);
             user = (UserInfo) ois.readObject();
         } catch (IOException e) {
-        }catch(ClassNotFoundException e1) {
+        } catch (ClassNotFoundException e1) {
 
         }
         return user;
     }
 
-
-
-
-
-
-
-    /**
-     * 保存数据的方法,我们需要拿到保存数据的具体类型,然后根据类型调用不同的保存方法
-     *
-     * @param context
-     * @param key
-     * @param object
-     */
-    public static void put(Context context, String key, Object object) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        if (object instanceof String) {
-            editor.putString(key, (String) object);
-        } else if (object instanceof Integer) {
-            editor.putInt(key, (Integer) object);
-        } else if (object instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) object);
-        } else if (object instanceof Float) {
-            editor.putFloat(key, (Float) object);
-        } else if (object instanceof Long) {
-            editor.putLong(key, (Long) object);
-        } else {
-            editor.putString(key, object.toString());
-        }
-        SharedPreferencesCompat.apply(editor);
-    }
-
-    /**
-     * 得到保存数据的方法,我们根据默认值得到保存的数据的具体类型,然后调用相对于的方法获取值
-     *
-     * @param context
-     * @param key
-     * @param defaultObject
-     * @return
-     */
-    public static Object get(Context context, String key, Object defaultObject) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
-                Context.MODE_PRIVATE);
-        if (defaultObject instanceof String) {
-            return sp.getString(key, (String) defaultObject);
-        } else if (defaultObject instanceof Integer) {
-            return sp.getInt(key, (Integer) defaultObject);
-        } else if (defaultObject instanceof Boolean) {
-            return sp.getBoolean(key, (Boolean) defaultObject);
-        } else if (defaultObject instanceof Float) {
-            return sp.getFloat(key, (Float) defaultObject);
-        } else if (defaultObject instanceof Long) {
-            return sp.getLong(key, (Long) defaultObject);
-        }
-        return null;
-    }
 
     /**
      * 移除某个key值已经对应的值

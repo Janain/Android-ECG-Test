@@ -23,11 +23,11 @@
         android:theme="@style/AppTheme">
         <!--android:theme="@style/AppTheme.Notitle.FullScreen"-->
         <!--android:name=".activity.LoginActivity"-->
-        <!--android:name=".activity.TestActivity"-->
         <!--android:name=".activity.LoginActivity"-->
+        <!--android:name=".activity.PersonalActivity"-->
 
         <activity
-            android:name=".activity.PersonalActivity"
+            android:name=".activity.wifi.MainActivity"
             android:persistableMode="persistAcrossReboots"
             android:theme="@style/AppTheme.Notitle.FullScreen"
             tools:targetApi="lollipop">

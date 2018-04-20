@@ -37,13 +37,11 @@ import com.exce.bluetooth.blueutils.callback.ConnectCallback;
 import com.exce.bluetooth.blueutils.callback.OnReceiverCallback;
 import com.exce.bluetooth.blueutils.callback.OnWriteCallback;
 import com.exce.bluetooth.blueutils.callback.ScanCallback;
-import com.exce.bluetooth.utils.MyField;
+import com.exce.bluetooth.bean.MyField;
 import com.exce.bluetooth.utils.MyObjIterator;
 import com.exce.bluetooth.utils.SharedPreferenceUtil;
 import com.exce.bluetooth.utils.TypeUntils;
 import com.exce.bluetooth.view.EcgView;
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Floats;
 import com.google.common.primitives.Shorts;
 
 import java.io.InputStream;

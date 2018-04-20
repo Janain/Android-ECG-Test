@@ -46,13 +46,6 @@ public class TypeUntils {
         return target;
     }
 
-//    public static void main(String[] args){
-//        byte[] data = new byte[3];
-//
-//        be2Int24(data,0);
-//
-//    }
-
     /**
      * 模拟unsigned 的 byte类型
      *
