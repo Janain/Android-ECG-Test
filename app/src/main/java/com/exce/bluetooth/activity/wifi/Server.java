@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,14 +22,14 @@ import java.util.List;
  * @Content
  */
 public class Server {
-    //协议头 2 字节 总长度 2 字节 帧类型 2 字节 数据长度 2 字节 数据 2 字节 结束字 2 字节
+    //协议头(2) + 总长度(2) + 帧类型(1) + 数据长度(2) + 数据(n) + 结束字(2)
     private static void genProtocol(DataOutputStream out, short data) throws IOException {
         // 数据
         byte[] dataBuffer = Shorts.toByteArray(data);
         List<Byte> sendList = new ArrayList<Byte>();
 
         //帧类型
-        byte type = 0x30;
+        byte type = 0x32;
         sendList.add(type);
 
         //数据长度
@@ -52,14 +53,14 @@ public class Server {
         //总长度 2
         short allLen = (short) (sendList.size());
         byte[] allArr = Shorts.toByteArray(allLen);
-        for (int i = allArr.length-1; i >= 0 ; i--) {
+        for (int i = allArr.length - 1; i >= 0; i--) {
             sendList.add(0, allArr[i]);
         }
 
         // 协议头 2
         byte head = 0xaa - 256;
-        sendList.add(0,head);
-        sendList.add(0,head);
+        sendList.add(0, head);
+        sendList.add(0, head);
 
         byte[] send = Bytes.toArray(sendList);
         //写入消息内容
@@ -88,9 +89,10 @@ public class Server {
             super.run();
             System.out.println("1连接......");
             OutputStream os = null;
+
             try {
-                os = socket.getOutputStream();
-                DataOutputStream outs = new DataOutputStream(os);
+//                os = socket.getOutputStream();
+//                DataOutputStream outs = new DataOutputStream(os);
                 String dataStr = readFileByLines(filename);
                 String[] dataStrArr = dataStr.split(",");
                 System.out.println("开始发送");
@@ -99,7 +101,7 @@ public class Server {
                 while (!sendover) {
                     for (String d : dataStrArr) {
                         count++;
-                        genProtocol(outs, Short.parseShort(d));
+                        genProtocol(dos, Short.parseShort(d));
 //                        Thread.sleep(10);
                         System.out.println("----------------data: " + d);
                     }
@@ -108,6 +110,11 @@ public class Server {
                     System.out.println("发送完成");
                 }
                 System.out.println("关闭");
+
+
+             while (true){
+
+             }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -174,4 +181,6 @@ public class Server {
         new Server().startServer();
 
     }
+
+
 }

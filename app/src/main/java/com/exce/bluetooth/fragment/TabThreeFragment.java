@@ -34,7 +34,7 @@ public class TabThreeFragment extends Fragment implements View.OnClickListener{
         nextImg = mRootView.findViewById(R.id.account_next);
 
         login_name = accountTv.getText().toString();
-        accountTv.setText(SharedPreferenceUtil.getLoginName(getContext()));
+//        accountTv.setText(SharedPreferenceUtil.getLoginName(getContext()));
         nextImg.setOnClickListener(this);
         return mRootView;
     }

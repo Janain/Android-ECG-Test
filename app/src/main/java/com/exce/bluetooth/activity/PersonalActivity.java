@@ -62,8 +62,8 @@ public class PersonalActivity extends AppCompatActivity implements View.OnClickL
                 .setCid(mCid.getText().toString())
                 .setSampleSpeed((short) 360)
                 .setGain((byte) 2)
-                .setPatientType(Byte.parseByte("儿童"))
-                .setDisplayLines(Byte.parseByte("12"));
+                .setPatientType((byte) 22)
+                .setDisplayLines((byte) 12);
 
     }
 

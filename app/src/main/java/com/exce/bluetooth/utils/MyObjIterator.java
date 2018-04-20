@@ -42,7 +42,8 @@ public class MyObjIterator {
             throw new RuntimeException(e);
         }
 
+        MyField myField = new MyField(name, fields[subscript].getType(), value);
         subscript++;
-        return new MyField( name, fields[subscript].getType(), value);
+        return myField;
     }
 }

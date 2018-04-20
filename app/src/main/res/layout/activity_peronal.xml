@@ -66,7 +66,7 @@
                 android:id="@+id/ecg_sex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="女" />
+                android:text="0" />
 
 
             <TextView
@@ -78,7 +78,7 @@
                 android:id="@+id/wcg_weight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="70kg" />
+                android:text="70.00" />
 
             <TextView
                 android:layout_width="wrap_content"

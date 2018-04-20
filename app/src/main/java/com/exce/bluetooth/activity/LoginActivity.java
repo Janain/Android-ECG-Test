@@ -35,9 +35,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         mPassword = findViewById(R.id.password);
         mBtnLogin = findViewById(R.id.main_btn_login);
         mBtnLogin.setOnClickListener(this);
-
-        mUsername.setText(SharedPreferenceUtil.getLoginName(this));
-        mPassword.setText(SharedPreferenceUtil.getLoginPassword(this));
+//
+//        mUsername.setText(SharedPreferenceUtil.getLoginName(this));
+//        mPassword.setText(SharedPreferenceUtil.getLoginPassword(this));
     }
 
     @Override
@@ -50,8 +50,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                         mPassword.getText().toString().equals(login_password)) {
                     Intent intent = new Intent(this, MainTabActivity.class);
                     startActivity(intent);
-                    SharedPreferenceUtil.putLoginName(getApplicationContext(), login_name);
-                    SharedPreferenceUtil.putLoginPassword(getApplicationContext(), login_password);
+//                    SharedPreferenceUtil.putLoginName(getApplicationContext(), login_name);
+//                    SharedPreferenceUtil.putLoginPassword(getApplicationContext(), login_password);
                     Toast.makeText(getApplicationContext(), "登陆成功...", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "重新登陆...", Toast.LENGTH_SHORT).show();

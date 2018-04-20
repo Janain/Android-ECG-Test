@@ -25,6 +25,7 @@
         <!--android:name=".activity.LoginActivity"-->
         <!--android:name=".activity.LoginActivity"-->
         <!--android:name=".activity.PersonalActivity"-->
+        <!--android:name=".activity.PersonalActivity"-->
 
         <activity
             android:name=".activity.wifi.MainActivity"

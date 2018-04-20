@@ -8,11 +8,6 @@ import java.io.Serializable;
  * @Content
  */
 public class UserInfo implements Serializable {
-
-    public static final byte UNKNOWN = 0;
-    public static final byte BOY = 1;
-    public static final byte GIRL = 2;
-
     private String openId;//账号
     private byte age;//年龄
     private float height;//身高
