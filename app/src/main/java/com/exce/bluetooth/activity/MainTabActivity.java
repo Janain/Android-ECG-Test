@@ -55,30 +55,24 @@ public class MainTabActivity extends AppCompatActivity {
     private void initDrawerLayout() {
 
         headerView = mNavigationView.getHeaderView(0);
-        headerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(intent);
-                Toast.makeText(MainTabActivity.this, "headerView clicked", Toast.LENGTH_LONG).show();
-            }
+        headerView.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(intent);
+            Toast.makeText(MainTabActivity.this, "headerView clicked", Toast.LENGTH_LONG).show();
         });
 
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mNavigationView.setNavigationItemSelectedListener(item -> {
 
-                switch (item.getItemId()) {
-                    case R.id.menu_app_update:
-                        Toast.makeText(MainTabActivity.this, "点击了应用更新", Toast.LENGTH_LONG).show();
-                        break;
-                    case R.id.menu_message:
-                        Toast.makeText(MainTabActivity.this, "点击了消息", Toast.LENGTH_LONG).show();
-                        break;
-                }
-
-                return false;
+            switch (item.getItemId()) {
+                case R.id.menu_app_update:
+                    Toast.makeText(MainTabActivity.this, "点击了应用更新", Toast.LENGTH_LONG).show();
+                    break;
+                case R.id.menu_message:
+                    Toast.makeText(MainTabActivity.this, "点击了消息", Toast.LENGTH_LONG).show();
+                    break;
             }
+
+            return false;
         });
     
 

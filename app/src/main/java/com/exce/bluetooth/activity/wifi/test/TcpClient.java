@@ -1,7 +1,6 @@
-package com.exce.bluetooth.activity.wifi;
+package com.exce.bluetooth.activity.wifi.test;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.exce.bluetooth.bean.MyField;
 import com.exce.bluetooth.bean.UserInfo;
@@ -71,19 +70,21 @@ public class TcpClient implements Runnable {
                 rcvLen = dis.read(buff);
                 for (int i = 0; i < rcvLen; i++) {
                     dataB.add(buff[i]);
-                    System.out.println("------------------------------*************--------------------" + buff[i]);
-                }
-
-                rcvMsg = new String(buff, 0, rcvLen,"utf-8");
+//                    rcvMsg = new String(buff, 0, rcvLen,"utf-8");
 //                rcvMsg = new String(buff, 0, rcvLen, "utf-8");
 //                Log.i(TAG, "run: 收到消息:" + rcvMsg);
-                Intent intent = new Intent();
-                intent.setAction("tcpClientReceiver");
-                intent.putExtra("tcpClientReceiver", rcvMsg);
-                TcpClientActivity.context.sendBroadcast(intent);//将消息发送给主界面
-                if (rcvMsg.equals("QuitClient")) {   //服务器要求客户端结束
-                    isRun = false;
+                    Intent intent = new Intent();
+                    intent.setAction("tcpClientReceiver");
+                    intent.putExtra("tcpClientReceiver", dataB.add(buff[i]));
+                    System.out.println("------------------------------*************--------------------" + dataB.add(buff[i]));
+                    TcpClientActivity.context.sendBroadcast(intent);//将消息发送给主界面
+                    if (rcvMsg.equals("QuitClient")) {   //服务器要求客户端结束
+                        isRun = false;
+                    }
+
                 }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

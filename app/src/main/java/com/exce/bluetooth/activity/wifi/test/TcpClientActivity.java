@@ -1,4 +1,4 @@
-package com.exce.bluetooth.activity.wifi;
+package com.exce.bluetooth.activity.wifi.test;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,8 +20,6 @@ import com.exce.bluetooth.R;
 import com.exce.bluetooth.view.EcgView;
 
 import java.lang.ref.WeakReference;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

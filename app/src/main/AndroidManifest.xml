@@ -26,10 +26,10 @@
         <!--android:name=".activity.LoginActivity"-->
         <!--android:name=".activity.LoginActivity"-->
         <!--android:name=".activity.PersonalActivity"-->
-        <!--android:name=".activity.PersonalActivity"-->
+        <!--android:name=".activity.wifi.TcpClientActivity"-->
 
         <activity
-            android:name=".activity.wifi.TcpClientActivity"
+            android:name=".activity.MainTabActivity"
             android:persistableMode="persistAcrossReboots"
             android:theme="@style/AppTheme.Notitle.FullScreen"
             tools:targetApi="lollipop">
@@ -39,8 +39,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainTabActivity" />
+        <!--<activity android:name=".activity.MainTabActivity" />-->
         <activity android:name=".activity.usb.USBActivity" />
+        <activity android:name=".activity.ble.BLEActivity" />
         <!--<activity android:name=".activity.wifi.TcpClientActivity" />-->
         <!--<activity android:name=".activity.wifi.MainActivity" />-->
     </application>

@@ -5,12 +5,8 @@
         android:orderInCategory="100"
         android:title="@string/usb_mode" />
     <item
-        android:id="@+id/change_wifi"
+        android:id="@+id/change_ble"
         android:orderInCategory="100"
-        android:title="@string/wifi_mode"/>
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/set" />
+        android:title="@string/ble_mode"/>
 
 </menu>

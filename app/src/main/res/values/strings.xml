@@ -5,6 +5,7 @@
     <string name="set">用户配置区</string>
     <string name="usb_mode">切换USB模式</string>
     <string name="wifi_mode">切换WIFI模式</string>
+    <string name="ble_mode">切换BLE模式</string>
     <string name="start">开始</string>
     <string name="stop">结束</string>
     <string name="drift_filtering">漂移滤波：</string>
