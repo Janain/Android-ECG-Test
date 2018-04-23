@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/yellow"
     android:orientation="vertical">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
@@ -13,7 +14,8 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.ToolBar"
         app:popupTheme="@style/OverflowMenuStyle"
-        app:title="WIFI模式"/>
+        app:title="WIFI模式" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -42,6 +44,10 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_send"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,6 +72,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="断开" />
+
+            <EditText
+                android:id="@+id/edit_tcpClientSend"
+                android:layout_width="100dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/btn_tcpClientSend"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:text="发送消息" />
         </LinearLayout>
     </LinearLayout>
 
