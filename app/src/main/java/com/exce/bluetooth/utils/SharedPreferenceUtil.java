@@ -28,47 +28,8 @@ public class SharedPreferenceUtil {
      * 保存在手机里面的文件名(自定义)
      */
     public static final String FILE_NAME = "share_ecg_data";
-//    private static final String LOGIN_NAME = "账号ID";
-//    private static final String LOGIN_PASSWORD = "账号密码";
-//    private static SharedPreferences mSharedPreferences;
 
-//    /**
-//     * 账号
-//     *
-//     * @param context
-//     * @param loginName
-//     */
-//    public static void putLoginName(Context context, String loginName) {
-//        mSharedPreferences = context.getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-//        SharedPreferences.Editor edit = mSharedPreferences.edit();
-//        edit.putString(LOGIN_NAME, loginName);
-//        edit.apply();
-//    }
-//
-//    public static String getLoginName(Context context) {
-//        mSharedPreferences = context.getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-//        return mSharedPreferences.getString(LOGIN_NAME, "");
-//    }
-//
-//    /**
-//     * 密码
-//     *
-//     * @param context
-//     * @param password
-//     */
-//    public static void putLoginPassword(Context context, String password) {
-//        mSharedPreferences = context.getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-//        SharedPreferences.Editor edit = mSharedPreferences.edit();
-//        edit.putString(LOGIN_PASSWORD, password);
-//        edit.apply();
-//    }
-//
-//    public static String getLoginPassword(Context context) {
-//        mSharedPreferences = context.getSharedPreferences(FILE_NAME, MODE_PRIVATE);
-//        return mSharedPreferences.getString(LOGIN_PASSWORD, "");
-//    }
-
-
+    //保存UserInfo
     public static void saveUser(Context context, String preferenceName, String key, UserInfo user) throws Exception {
         if (user instanceof Serializable) {
             SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceName, context.MODE_PRIVATE);
@@ -79,7 +40,7 @@ public class SharedPreferenceUtil {
                 oos.writeObject(user);//把对象写到流里
                 String temp = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT));
                 editor.putString(key, temp);
-                editor.commit();
+                editor.apply();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -98,6 +59,7 @@ public class SharedPreferenceUtil {
             ObjectInputStream ois = new ObjectInputStream(bais);
             user = (UserInfo) ois.readObject();
         } catch (IOException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e1) {
 
         }

@@ -1,5 +1,11 @@
 package com.exce.bluetooth.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
 
@@ -12,16 +18,17 @@ import java.util.concurrent.BlockingQueue;
  * @Create 2018/4/9.
  * @Content
  */
-public class TypeUntils {
+public class Untils {
     /**
      * 数组byte转int数据(大端)
-     * @param source
-     * @return
+     *
+     * @param source byte[]
+     * @return int
      */
     public static int be2Int24(byte[] source, int offset) {
         int target = 0;
         for (int i = 0; i < 3; i++) {
-            target += (source[i + offset] & 0xff) << (8 * (3-1-i));
+            target += (source[i + offset] & 0xff) << (8 * (3 - 1 - i));
         }
         System.out.println(Integer.toHexString(target));
         if ((target & 0x00800000) == 0x00800000) {
@@ -32,8 +39,9 @@ public class TypeUntils {
 
     /**
      * 数组byte转int数据（小端）
-     * @param source
-     * @return
+     *
+     * @param source byte[]
+     * @return int
      */
     public static int le2Int24(byte[] source, int offset) {
         int target = 0;
@@ -72,8 +80,8 @@ public class TypeUntils {
     /**
      * 模拟unsigned 的 byte类型
      *
-     * @param i
-     * @return
+     * @param i int
+     * @return byte
      */
     public static byte unsigned_byte(int i) {
         if (i > 255 || i < 0) {
@@ -88,32 +96,32 @@ public class TypeUntils {
 
     /**
      * byte[] 拼接
-     * @return
+     *
+     * @return byte[]
      */
     public static byte[] byteAppend(byte[]... bytes) {
         int len = 0;
         int subscript = 0;
-        for (byte[] b: bytes) {
+        for (byte[] b : bytes) {
             if (b == null) continue;
             len += b.length;
         }
-
         byte[] all = new byte[len];
-        for (byte[] b: bytes) {
+        for (byte[] b : bytes) {
             if (b == null) continue;
-            for (byte sb: b) {
+            for (byte sb : b) {
                 all[subscript] = sb;
                 subscript++;
             }
         }
-
         return all;
     }
 
     /**
      * float 转 byte[]
-     * @param f
-     * @return
+     *
+     * @param f float
+     * @return byte[]
      */
     public static byte[] float2Bytes(float f) {
         return Ints.toByteArray(Float.floatToIntBits(f));
@@ -121,10 +129,26 @@ public class TypeUntils {
 
     /**
      * byte[] 转 float
-     * @param b
-     * @return
+     *
+     * @param b byte[]
+     * @return float
      */
-    public static float bytes2Float(byte[] b){
+    public static float bytes2Float(byte[] b) {
         return Float.intBitsToFloat(Ints.fromByteArray(b));
     }
+
+    /**
+     * 隐藏虚拟键盘
+     */
+    public  static void hideIputKeyboard(final Context context) {
+        final Activity activity = (Activity) context;
+        activity.runOnUiThread(() -> {
+            InputMethodManager mInputKeyBoard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (activity.getCurrentFocus() != null) {
+                mInputKeyBoard.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),        InputMethodManager.HIDE_NOT_ALWAYS);
+                activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+            }
+        });
+    }
+
 }

@@ -8,6 +8,7 @@ import com.exce.bluetooth.bean.FragmentInfo;
 import com.exce.bluetooth.fragment.TabOneFragment;
 import com.exce.bluetooth.fragment.TabThreeFragment;
 import com.exce.bluetooth.fragment.TabTwoFragment;
+import com.exce.bluetooth.utils.Untils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +42,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         try {
             return (Fragment) mFragments.get(position).getFragment().newInstance();
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 

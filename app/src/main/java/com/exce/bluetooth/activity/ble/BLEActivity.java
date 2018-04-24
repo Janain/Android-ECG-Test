@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.exce.bluetooth.R;
 import com.exce.bluetooth.activity.usb.USBActivity;
 import com.exce.bluetooth.adapter.DeviceListAdapter;
-import com.exce.bluetooth.bean.Constants;
 import com.exce.bluetooth.bean.MyField;
 import com.exce.bluetooth.bean.UserInfo;
 import com.exce.bluetooth.blueutils.BleController;
@@ -35,7 +34,7 @@ import com.exce.bluetooth.blueutils.callback.OnWriteCallback;
 import com.exce.bluetooth.blueutils.callback.ScanCallback;
 import com.exce.bluetooth.utils.MyObjIterator;
 import com.exce.bluetooth.utils.SharedPreferenceUtil;
-import com.exce.bluetooth.utils.TypeUntils;
+import com.exce.bluetooth.utils.Untils;
 import com.exce.bluetooth.view.EcgView;
 import com.google.common.primitives.Shorts;
 
@@ -265,29 +264,29 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
                 while (dataHandThread_isRunning) {
                     // 取协议头
                     byte b;
-                    b = TypeUntils.dequeue(dataB);
-                    if (b != TypeUntils.unsigned_byte(0xaa)) continue;
-                    b = TypeUntils.dequeue(dataB);
-                    if (b != TypeUntils.unsigned_byte(0xaa)) continue;
+                    b = Untils.dequeue(dataB);
+                    if (b != Untils.unsigned_byte(0xaa)) continue;
+                    b = Untils.dequeue(dataB);
+                    if (b != Untils.unsigned_byte(0xaa)) continue;
                     // 取总长度
                     for (int i = 0; i < 2; i++) {
-                        buffer[i] = TypeUntils.dequeue(dataB);
+                        buffer[i] = Untils.dequeue(dataB);
                     }
                     len = Shorts.fromBytes(buffer[0], buffer[1]);
 
                     // 取剩下的
                     for (int i = 0; i < len; i++) {
-                        buffer[i] = TypeUntils.dequeue(dataB);
+                        buffer[i] = Untils.dequeue(dataB);
                     }
 
                     // 判断协议完整性(判断尾或crc)
-                    if (buffer[len - 2] != TypeUntils.unsigned_byte(0x55)) continue;
-                    if (buffer[len - 1] != TypeUntils.unsigned_byte(0x55)) continue;
+                    if (buffer[len - 2] != Untils.unsigned_byte(0x55)) continue;
+                    if (buffer[len - 1] != Untils.unsigned_byte(0x55)) continue;
 
                     // -------------判断帧类型-------------------------
                     // 帧类型
                     // TODO 判断帧类型，这里默认为数据
-                    if (buffer[0] != TypeUntils.unsigned_byte(0x32)) continue;
+                    if (buffer[0] != Untils.unsigned_byte(0x32)) continue;
 
                     //--------以下为数据帧解析---------------
                     // 数据长度
@@ -359,15 +358,15 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
             short valueLen = (short) value.length;
             byte[] valueLenBuffer = Shorts.toByteArray(valueLen); // 指令数据长度
 
-            byte[] ins = TypeUntils.byteAppend(insHead, valueLenBuffer, value); // 得到单条指令
-            allIns = TypeUntils.byteAppend(allIns, ins); // 追加指令到指令集合中
+            byte[] ins = Untils.byteAppend(insHead, valueLenBuffer, value); // 得到单条指令
+            allIns = Untils.byteAppend(allIns, ins); // 追加指令到指令集合中
         }
-        byte[] head = new byte[]{TypeUntils.unsigned_byte(0xaa), TypeUntils.unsigned_byte(0xaa)}; // 头
+        byte[] head = new byte[]{Untils.unsigned_byte(0xaa), Untils.unsigned_byte(0xaa)}; // 头
         int allInsLen = (allIns == null) ? 0 : allIns.length;
         byte[] allLen = Shorts.toByteArray((short) (allInsLen + 3)); // 总长度
-        byte[] type = new byte[]{TypeUntils.unsigned_byte(0x30)}; // 帧类型
-        byte[] end = new byte[]{TypeUntils.unsigned_byte(0x55), TypeUntils.unsigned_byte(0x55)}; // 结束字
-        return TypeUntils.byteAppend(head, allLen, type, allIns, end);
+        byte[] type = new byte[]{Untils.unsigned_byte(0x30)}; // 帧类型
+        byte[] end = new byte[]{Untils.unsigned_byte(0x55), Untils.unsigned_byte(0x55)}; // 结束字
+        return Untils.byteAppend(head, allLen, type, allIns, end);
     }
 
     /**
@@ -386,7 +385,7 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         } else if (type == short.class) {
             b = Shorts.toByteArray((short) obj);
         } else if (type == float.class) {
-            b = TypeUntils.float2Bytes((float) obj);
+            b = Untils.float2Bytes((float) obj);
         }
         return b;
     }
@@ -401,52 +400,52 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         byte[] b = new byte[2];
         switch (name) {
             case "openId":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x01);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x01);
                 break;
             case "age":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x02);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x02);
                 break;
             case "height":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x03);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x03);
                 break;
             case "userName":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x04);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x04);
                 break;
             case "sex":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x05);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x05);
                 break;
             case "weight":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x06);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x06);
                 break;
             case "phone":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x07);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x07);
                 break;
             case "cid":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x08);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x08);
                 break;
             case "sampleSpeed":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x0a);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x0a);
                 break;
             case "gain":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x0b);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x0b);
                 break;
             case "patientType":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x0c);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x0c);
                 break;
             case "displayLines":
-                b[0] = TypeUntils.unsigned_byte(0x00);
-                b[1] = TypeUntils.unsigned_byte(0x0d);
+                b[0] = Untils.unsigned_byte(0x00);
+                b[1] = Untils.unsigned_byte(0x0d);
                 break;
             default:
                 throw new RuntimeException("未知的指令名");
