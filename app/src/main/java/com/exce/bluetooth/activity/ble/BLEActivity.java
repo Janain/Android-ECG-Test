@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.exce.bluetooth.R;
 import com.exce.bluetooth.activity.usb.USBActivity;
 import com.exce.bluetooth.adapter.DeviceListAdapter;
+import com.exce.bluetooth.bean.Constants;
 import com.exce.bluetooth.bean.MyField;
 import com.exce.bluetooth.bean.UserInfo;
 import com.exce.bluetooth.blueutils.BleController;
@@ -51,59 +52,43 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * @Author Wangjj
  * @Create 2018/4/23  16:58.
- * @Title
+ * @Title 蓝牙测试
  */
-public class BLEActivity extends AppCompatActivity implements View.OnClickListener{
+public class BLEActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 1;
     private static final String TAG = "BLEActivity";
-    /**
-     * ---------------蓝牙---------
-     */
+    //-----------------------蓝牙------------------
+    private Toolbar mToolBar;
     private Button btnDevice, btnDisconn, btnSample;
-    //连接设备tv
-    private TextView connState, sampTime;
-    //dialog 上的刷新按钮
-    private ImageButton btRefresh;
-    //点击设备弹出的dialog
-    private Dialog dialog;
-    //dialog列表的适配器
-    private DeviceListAdapter dvAdapter;
-    //蓝牙工具类
-    private BleController mBleController;
-    //当前连接的mac地址
-    private String mDeviceAddress;
-    /**
-     * 线程
-     */
-    boolean receivedThreadRuning = false; //数据处理线程运行状态
-    /**
-     * ------------心电-----------
-     */
+    private TextView connState, sampTime;//连接设备tv
+    private ImageButton btRefresh;//dialog 上的刷新按钮
+    private Dialog dialog;  //点击设备弹出的dialog
+    private DeviceListAdapter dvAdapter; //dialog列表的适配器
+    private BleController mBleController; //蓝牙工具类
+    private String mDeviceAddress; //当前连接的mac地址
+
+    private boolean dataHandThread_isRunning = false; //数据处理线程运行状态
+
     private BlockingQueue<Float[]> data0Q = new LinkedBlockingQueue<>();
     private BlockingQueue<Byte> dataB = new LinkedBlockingQueue<>();
-    Toolbar mToolBar;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_ble);
-        init( );
-        loadDatas();
-        simulator();
+        init();
     }
-
 
     //初始化
     @SuppressLint("SetTextI18n")
-    public void init( ) {
-        btnDevice =  findViewById(R.id.btn_device);
-        btnDisconn =  findViewById(R.id.btn_disconn);
-        btnSample =   findViewById(R.id.btn_sample_msg);
-        connState =  findViewById(R.id.tv_conn_state);
-        sampTime =  findViewById(R.id.tv_sampling_time);
-        mToolBar =  findViewById(R.id.tool_bar);
+    public void init() {
+        btnDevice = findViewById(R.id.btn_device);
+        btnDisconn = findViewById(R.id.btn_disconn);
+        btnSample = findViewById(R.id.btn_sample_msg);
+        connState = findViewById(R.id.tv_conn_state);
+        sampTime = findViewById(R.id.tv_sampling_time);
+        mToolBar = findViewById(R.id.tool_bar);
         mBleController = BleController.getInstance().initble(this);
         dvAdapter = new DeviceListAdapter(this);
         btnDevice.setOnClickListener(this);
@@ -136,13 +121,14 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     /**
-     * 模拟心电发送，心电数据是一秒500个包，所以
+     * 模拟心电发送，心电数据是一秒300个包，所以
      */
     private void simulator() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 if (EcgView.isRunning) {
+
                     if (data0Q.size() > 0) {
                         EcgView.addEcgData0(data0Q.poll());
                     }
@@ -173,7 +159,149 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    UserInfo ui;
+
+    /**
+     * 扫描
+     *
+     * @param enable 是否打开
+     */
+    private void scanDevices(final boolean enable) {
+        mBleController.ScanBle(enable, new ScanCallback() {
+            @Override
+            public void onSuccess() {
+                if (dvAdapter.mBleDevices.size() < 0) {
+                    Toast.makeText(getApplicationContext(), "未搜索到Ble设备", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onScanning(BluetoothDevice device, int rssi, byte[] scanRecord) {
+                dvAdapter.addDevice(device, getDistance(rssi));
+            }
+        });
+    }
+
+    private static final double A_Value = 60; // A - 发射端和接收端相隔1米时的信号强度
+    private static final double n_Value = 2.0; //  n - 环境衰减因子
+
+    //根据Rssi获得返回的距离,返回数据单位为m
+    public static double getDistance(int rssi) {
+        int iRssi = Math.abs(rssi);
+        double power = (iRssi - A_Value) / (10 * n_Value);
+        return Math.pow(10, power);
+    }
+
+    BluetoothDevice device;
+
+    //显示列表dialog
+    BluetoothGattCharacteristic characteristic;
+
+    /**
+     * 蓝牙连接并读取数据
+     */
+    private void showDeviceListDialog() {
+        Log.e("  ", "kkkkkkk");
+        LayoutInflater factory = LayoutInflater.from(this);
+        View view = factory.inflate(R.layout.dialog_scan_device, null);
+        dialog = new Dialog(this, R.style.MyDialog);
+        // ContentView
+        dialog.setContentView(view);
+        dialog.setCancelable(false);
+        dialog.show();
+        Button btn_dialgo_cancle = view.findViewById(R.id.btn_dialog_scan_cancle);
+        btRefresh = view.findViewById(R.id.btn_refresh);
+        ListView listView = view.findViewById(R.id.listview_device);
+        listView.setAdapter(dvAdapter);
+        Log.e("  ", "ffffff");
+        btRefresh.setOnClickListener(v -> {
+            dvAdapter.clear();
+            scanDevices(true);
+            Toast.makeText(getApplicationContext(), "点击刷新小圈圈。。。", Toast.LENGTH_SHORT).show();
+        });
+        listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
+            connState.setText("正在连接。。");
+            Toast.makeText(getApplicationContext(), "请稍候! " + " " + "正在连接... ", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+            device = dvAdapter.getDevice(position);
+            if (device == null)
+                return;
+            mDeviceAddress = device.getAddress();
+            mBleController.Connect(mDeviceAddress, new ConnectCallback() {
+                @Override
+                public void onConnSuccess() {
+                    connState.setText("连接成功。。");
+                    //连接成功后进行数据协议的解析
+                    startDataHandThread();
+                    ///设置读取数据的监听
+                    mBleController.RegistReciveListener(TAG, value -> {
+                        // Todo
+                        byte[] data = characteristic.getValue();
+                        for (byte d : data) {
+                            dataB.add(d);
+                        }
+                        simulator();
+                    });
+                }
+
+                @Override
+                public void onConnFailed() {
+                    connState.setText("连接断开。。");
+                    Toast.makeText(getApplicationContext(), "连接超时，请重试", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+        btn_dialgo_cancle.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    /**
+     * 连接成功后进行数据协议的解析
+     */
+    private void startDataHandThread() {
+        if (!dataHandThread_isRunning) {
+            dataHandThread_isRunning = true;
+            new Thread(() -> {
+                byte[] buffer = new byte[4096];
+                int len;
+                while (dataHandThread_isRunning) {
+                    // 取协议头
+                    byte b;
+                    b = TypeUntils.dequeue(dataB);
+                    if (b != TypeUntils.unsigned_byte(0xaa)) continue;
+                    b = TypeUntils.dequeue(dataB);
+                    if (b != TypeUntils.unsigned_byte(0xaa)) continue;
+                    // 取总长度
+                    for (int i = 0; i < 2; i++) {
+                        buffer[i] = TypeUntils.dequeue(dataB);
+                    }
+                    len = Shorts.fromBytes(buffer[0], buffer[1]);
+
+                    // 取剩下的
+                    for (int i = 0; i < len; i++) {
+                        buffer[i] = TypeUntils.dequeue(dataB);
+                    }
+
+                    // 判断协议完整性(判断尾或crc)
+                    if (buffer[len - 2] != TypeUntils.unsigned_byte(0x55)) continue;
+                    if (buffer[len - 1] != TypeUntils.unsigned_byte(0x55)) continue;
+
+                    // -------------判断帧类型-------------------------
+                    // 帧类型
+                    // TODO 判断帧类型，这里默认为数据
+                    if (buffer[0] != TypeUntils.unsigned_byte(0x32)) continue;
+
+                    //--------以下为数据帧解析---------------
+                    // 数据长度
+                    short datalen = Shorts.fromBytes(buffer[1], buffer[2]);
+                    // 数据
+                    Float[] f = new Float[12];
+                    for (int i = 0; i < datalen / 2; i++) {
+                        f[i] = (float) Shorts.fromBytes(buffer[2 * i + 3], buffer[2 * i + 4]);
+                    }
+                    data0Q.add(f);
+                }
+            }).start();
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -185,9 +313,9 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.btn_disconn:
                 //蓝牙断开按钮
-//                mBleController.disConnection();
-//                data0Q.clear();
-//                EcgView.isRunning = false;
+                mBleController.disConnection();
+                data0Q.clear();
+                EcgView.isRunning = false;
                 Toast.makeText(getApplicationContext(), "蓝牙断开按钮", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_sample_msg:
@@ -205,14 +333,12 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
 
                     }
                 });
-
                 Toast.makeText(getApplicationContext(), "蓝牙断开按钮", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
         }
     }
-
 
     /**
      * 用自定义协议包装
@@ -243,7 +369,6 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         byte[] end = new byte[]{TypeUntils.unsigned_byte(0x55), TypeUntils.unsigned_byte(0x55)}; // 结束字
         return TypeUntils.byteAppend(head, allLen, type, allIns, end);
     }
-
 
     /**
      * 对象转byte数组（自定义）
@@ -329,102 +454,6 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         return b;
     }
 
-
-    /**
-     * 扫描
-     *
-     * @param enable
-     */
-    private void scanDevices(final boolean enable) {
-        mBleController.ScanBle(enable, new ScanCallback() {
-            @Override
-            public void onSuccess() {
-                if (dvAdapter.mBleDevices.size() < 0) {
-                    Toast.makeText(getApplicationContext(), "未搜索到Ble设备", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onScanning(BluetoothDevice device, int rssi, byte[] scanRecord) {
-                dvAdapter.addDevice(device, getDistance(rssi));
-            }
-        });
-    }
-
-    private static final double A_Value = 60; // A - 发射端和接收端相隔1米时的信号强度
-    private static final double n_Value = 2.0; //  n - 环境衰减因子
-
-    //根据Rssi获得返回的距离,返回数据单位为m
-    public static double getDistance(int rssi) {
-        int iRssi = Math.abs(rssi);
-        double power = (iRssi - A_Value) / (10 * n_Value);
-        return Math.pow(10, power);
-    }
-
-    BluetoothDevice device;
-
-    //显示列表dialog
-    BluetoothGattCharacteristic characteristic;
-
-    private void showDeviceListDialog() {
-        Log.e("  ", "kkkkkkk");
-        LayoutInflater factory = LayoutInflater.from(getApplicationContext());
-        View view = factory.inflate(R.layout.dialog_scan_device, null);
-        dialog = new Dialog(getApplicationContext(), R.style.MyDialog);
-        // ContentView
-        dialog.setContentView(view);
-        dialog.setCancelable(false);
-        dialog.show();
-        Button btn_dialgo_cancle = view.findViewById(R.id.btn_dialog_scan_cancle);
-        btRefresh = view.findViewById(R.id.btn_refresh);
-        ListView listView = view.findViewById(R.id.listview_device);
-        listView.setAdapter(dvAdapter);
-        Log.e("  ", "ffffff");
-        btRefresh.setOnClickListener(v -> {
-            dvAdapter.clear();
-            scanDevices(true);
-            Toast.makeText(getApplicationContext(), "点击刷新小圈圈。。。", Toast.LENGTH_SHORT).show();
-        });
-        listView.setOnItemClickListener((arg0, arg1, position, arg3) -> {
-            connState.setText("正在连接。。");
-            Toast.makeText(getApplicationContext(), "请稍候! " + " " + "正在连接... ", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-            device = dvAdapter.getDevice(position);
-            if (device == null)
-                return;
-            mDeviceAddress = device.getAddress();
-            mBleController.Connect(mDeviceAddress, new ConnectCallback() {
-                @Override
-                public void onConnSuccess() {
-                    connState.setText("连接成功。。");
-                    //连接成功后进行数据协议的解析
-                    if (!receivedThreadRuning) {
-                        receivedThreadRuning = true;
-//                            new receiveThread().start();
-                    }
-                    ///设置读取数据的监听
-                    mBleController.RegistReciveListener(TAG, value -> {
-                        // Todo
-                        byte[] data = characteristic.getValue();
-                        for (byte d : data) {
-                            dataB.add(d);
-                        }
-                    });
-                }
-
-                @Override
-                public void onConnFailed() {
-                    connState.setText("连接断开。。");
-                    Toast.makeText(getApplicationContext(), "连接超时，请重试", Toast.LENGTH_SHORT).show();
-                }
-
-            });
-
-        });
-
-        btn_dialgo_cancle.setOnClickListener(v -> dialog.dismiss());
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -461,17 +490,6 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
-
-
-    /**
-     *
-     */
-
-
-    public void bleWrite() {
-
-
     }
 
 

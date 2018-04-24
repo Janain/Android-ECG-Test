@@ -17,7 +17,7 @@ import com.exce.bluetooth.utils.SharedPreferenceUtil;
 /**
  * @Author Wangjj
  * @Create 2018/4/10.
- * @Content
+ * @Content 个人中心
  */
 public class PersonalActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private EditText mAge, mHeight, mUserName, mSex, mWeight, mPhone, mCid;

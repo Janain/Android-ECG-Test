@@ -5,6 +5,7 @@ import com.google.common.primitives.Ints;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * @Author Wangjj
@@ -44,6 +45,28 @@ public class TypeUntils {
             target = target | 0xff000000;
         }
         return target;
+    }
+
+
+    /**
+     * 取出队列中的一个数据
+     *
+     * @param queue BlockingQueue<Byte>
+     * @return byte
+     */
+    public static byte dequeue(BlockingQueue<Byte> queue) {
+        Byte b;
+        do {
+            b = queue.poll();
+            if (b == null) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } while (b == null);
+        return b;
     }
 
     /**

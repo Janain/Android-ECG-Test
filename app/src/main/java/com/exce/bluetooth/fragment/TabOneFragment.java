@@ -1,20 +1,28 @@
 package com.exce.bluetooth.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exce.bluetooth.R;
 import com.exce.bluetooth.activity.ble.BLEActivity;
 import com.exce.bluetooth.activity.usb.USBActivity;
+import com.exce.bluetooth.activity.wifi.test.TcpClient;
+import com.exce.bluetooth.activity.wifi.test.TcpClientActivity;
 import com.exce.bluetooth.bean.MyField;
 import com.exce.bluetooth.bean.UserInfo;
 import com.exce.bluetooth.utils.MyObjIterator;
@@ -41,35 +49,45 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @Content
  */
 public class TabOneFragment extends Fragment {
-
-
-    /**
-     * ------------心电-----------
-     */
+    //---------------------心电---------------------
     private BlockingQueue<Float[]> data0Q = new LinkedBlockingQueue<>();
     private BlockingQueue<Byte> dataB = new LinkedBlockingQueue<>();
-    //数据处理线程
-    private boolean dataHandThread_isRunning = false;
-
+    private boolean dataHandThread_isRunning = false; //数据处理线程
     //------------------------------------------
     private View mRootView;
-    Toolbar mToolBar;
+    private Toolbar mToolBar;
+    private TextView txtSend;
+    private EditText editPort, editSendMsg;
+    private Button btnConn, btnClientSend;
+    private MyBtnClicker myBtnClicker = new MyBtnClicker();
 
-    public TabOneFragment() {
-    }
+    //--------------------------------------------
+
+
+    public TabOneFragment() {}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_home, container, false);
-        // Activity按钮事件中
-        new GetLogTask().execute();
-        simulator();
         init(mRootView);
         return mRootView;
     }
 
+    /**
+     * 绑定ID
+     */
     private void init(View view) {
+
+        editPort = view.findViewById(R.id.edit_tcpClientPort);
+        editSendMsg = view.findViewById(R.id.edit_tcpClientSend);
+        txtSend = view.findViewById(R.id.tv_send);
+        btnConn = view.findViewById(R.id.btn_conn_wifi);
+        btnClientSend = view.findViewById(R.id.btn_tcpClientSend);
+        btnConn.setOnClickListener(myBtnClicker);
+        btnClientSend.setOnClickListener(myBtnClicker);
+        btnClientSend.setEnabled(false);
+
         mToolBar = view.findViewById(R.id.tool_bar);
         mToolBar.inflateMenu(R.menu.toolbar_menu);
         mToolBar.setOnMenuItemClickListener(item -> {
@@ -92,12 +110,39 @@ public class TabOneFragment extends Fragment {
         });
     }
 
+    /**
+     * 监听点击事件
+     */
+    private class MyBtnClicker implements View.OnClickListener {
+        private static final String TAG = "MyBtnClicker";
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btn_conn_wifi://开始连接
+                    Log.i(TAG, "onClick: 开始");
+                    btnConn.setEnabled(false);
+                    btnClientSend.setEnabled(true);
+                    new GetLogTask().execute();
+                    simulator();
+                    break;
+                case R.id.btn_tcpClientSend://发送消息
+//                    Message message = Message.obtain();
+//                    message.what = 2;
+//                    message.obj = editSendMsg.getText().toString();
+//                    myHandler.sendMessage(message);
+//                    exec.execute(() -> tcpClient.send(editSendMsg.getText().toString()));
+                    break;
+            }
+        }
+    }
 
     /**
      * socket
      */
+    @SuppressLint("StaticFieldLeak")
     public class GetLogTask extends AsyncTask<Void, Void, String> {
-
+        //doInBackground执行完后由UI线程调用，用于更新界面操作
         @Override
         protected String doInBackground(Void... voids) {
             try {
@@ -109,7 +154,6 @@ public class TabOneFragment extends Fragment {
                 UserInfo ui = SharedPreferenceUtil.getUser(getContext(), "ecg", "config_msg");
                 byte[] data = mParse(ui);
                 dos.write(data);
-
 
                 InputStream is = s.getInputStream();
                 DataInputStream dis = new DataInputStream(is);
@@ -142,35 +186,36 @@ public class TabOneFragment extends Fragment {
                 while (dataHandThread_isRunning) {
                     // 取协议头
                     byte b;
-                    b = dequeue(dataB);
-                    if (b != unsigned_byte(0xaa)) continue;
-                    b = dequeue(dataB);
-                    if (b != unsigned_byte(0xaa)) continue;
+                    b = TypeUntils.dequeue(dataB);
+                    if (b != TypeUntils.unsigned_byte(0xaa)) continue;
+                    b = TypeUntils.dequeue(dataB);
+                    if (b != TypeUntils.unsigned_byte(0xaa)) continue;
                     // 取总长度
                     for (int i = 0; i < 2; i++) {
-                        buffer[i] = dequeue(dataB);
+                        buffer[i] = TypeUntils.dequeue(dataB);
                     }
                     len = Shorts.fromBytes(buffer[0], buffer[1]);
 
                     // 取剩下的
                     for (int i = 0; i < len; i++) {
-                        buffer[i] = dequeue(dataB);
+                        buffer[i] = TypeUntils.dequeue(dataB);
                     }
 
                     // 判断协议完整性(判断尾或crc)
-                    if (buffer[len - 2] != unsigned_byte(0x55)) continue;
-                    if (buffer[len - 1] != unsigned_byte(0x55)) continue;
+                    if (buffer[len - 2] != TypeUntils.unsigned_byte(0x55)) continue;
+                    if (buffer[len - 1] != TypeUntils.unsigned_byte(0x55)) continue;
 
                     // -------------判断帧类型-------------------------
                     // 帧类型
                     // TODO 判断帧类型，这里默认为数据
-                    if (buffer[0] != unsigned_byte(0x32)) continue;
+                    if (buffer[0] != TypeUntils.unsigned_byte(0x32)) continue;
 
                     //--------以下为数据帧解析---------------
                     // 数据长度
                     short datalen = Shorts.fromBytes(buffer[1], buffer[2]);
                     // 数据
                     Float[] f = new Float[12];
+
                     for (int i = 0; i < datalen / 2; i++) {
                         f[i] = (float) Shorts.fromBytes(buffer[2 * i + 3], buffer[2 * i + 4]);
                     }
@@ -179,7 +224,6 @@ public class TabOneFragment extends Fragment {
             }).start();
         }
     }
-
 
     /**
      * 用自定义协议包装
@@ -212,9 +256,9 @@ public class TabOneFragment extends Fragment {
     /**
      * 对比UserInfo  更新
      *
-     * @param old
-     * @param newU
-     * @return
+     * @param old  旧的userinfo
+     * @param newU 新的userinfo
+     * @return UserInfo
      */
     public UserInfo compare(UserInfo old, UserInfo newU) {
         UserInfo u = new UserInfo();
@@ -262,8 +306,8 @@ public class TabOneFragment extends Fragment {
     /**
      * 对象转byte数组（自定义）
      *
-     * @param obj
-     * @param type
+     * @param obj  obj
+     * @param type type
      * @return byte[]
      */
     public byte[] objToByte(Object obj, Type type) {
@@ -283,7 +327,7 @@ public class TabOneFragment extends Fragment {
     /**
      * 获取指令头
      *
-     * @param name
+     * @param name String
      * @return 指令
      */
     public byte[] getInsHead(String name) {
@@ -344,57 +388,16 @@ public class TabOneFragment extends Fragment {
     }
 
 
-    /**
-     * 取出队列中的一个数据
-     *
-     * @param queue
-     * @return
-     */
-    private byte dequeue(BlockingQueue<Byte> queue) {
-        Byte b = null;
-        do {
-            b = queue.poll();
-            if (b == null) {
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } while (b == null);
-        return b;
-    }
-
-    /**
-     * 模拟unsigned 的 byte类型
-     *
-     * @param i
-     * @return
-     */
-    private byte unsigned_byte(int i) {
-        if (i > 255 || i < 0) {
-            throw new RuntimeException("i 必须在 0x00 - 0xff 之间");
-        }
-        if (i > 127) {
-            return (byte) (i - 256);
-        } else {
-            return (byte) i;
-        }
-    }
-
-
-    /**
-     * 显示心电图入口
-     */
     private void simulator() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if (EcgView.isRunning) {
-                    if (data0Q.size() > 0) {
-                        EcgView.addEcgData0(data0Q.poll());
+                    if (EcgView.isRunning) {
+                        if (data0Q.size() > 0) {
+                            EcgView.addEcgData0(data0Q.poll());
+                        }
                     }
-                }
+
             }
         }, 0, 2);
     }

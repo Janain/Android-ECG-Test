@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/yellow"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -13,7 +14,65 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.ToolBar"
         app:popupTheme="@style/OverflowMenuStyle"
-        app:title="主页" />
+        app:title="主页(WIFI模式)" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="port" />
+
+        <EditText
+            android:id="@+id/edit_tcpClientPort"
+            android:layout_width="200dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btn_conn_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="连接" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_send"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:hint="显示已发送消息的的数据" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_tcpClientSend"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:hint="请输入msg" />
+
+        <Button
+            android:id="@+id/btn_tcpClientSend"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:text="发送消息" />
+
+    </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -21,14 +80,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <com.exce.bluetooth.view.EcgView
-                android:id="@+id/sendMsg"
                 android:layout_width="match_parent"
-                android:layout_height="1500dp"
-                android:text="sendMsg" />
+                android:layout_height="1000dp"
+                android:layout_margin="8dp" />
         </LinearLayout>
+
 
     </android.support.v4.widget.NestedScrollView>
 

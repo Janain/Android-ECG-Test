@@ -111,11 +111,6 @@ public class Server {
                 }
                 System.out.println("关闭");
 
-
-             while (true){
-
-             }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -169,18 +164,15 @@ public class Server {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e1) {
+                } catch ( Exception e1) {
                 }
             }
         }
         return readFileByLines(fileName);
     }
 
-
     public static void main(String[] args) {
         new Server().startServer();
-
     }
-
 
 }

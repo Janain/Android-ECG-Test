@@ -330,7 +330,7 @@ public class BleController {
     /**
      * 断开连接
      */
-    private void disConnection() {
+    public void disConnection() {
         if (null == mBleAdapter || null == mBleGatt) {
             Log.e(TAG, "disconnection error maybe no init");
             return;

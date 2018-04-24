@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.exce.bluetooth.bean.Constants;
 import com.exce.bluetooth.bean.EcgPoint;
 
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * @Author Wangjj
+ * @Create 2018/4/20.
+ * @Content 自定义surfaceview控件画心电图
+ */
 public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SurfaceHolder surfaceHolder;
@@ -33,18 +39,13 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     private float mHeight;//控件高度
     public Thread RunThread = null;
     private final float XOFFSET_BIG = 100; // x 坐标系偏移值
-    private final int SAMPLING_RATE = 300;//采样率
     public final int XCOUNT = 3 * 500; // x轴 点 总数 3= 秒， 128= 采样率
     public int xLoc = 0; // 当前画笔的位置
     /********--------------------------------------------------------------------------*/
-    //背景画笔
-    protected Paint bgPaint;
-    //小网格颜色
-    protected int mSGridColor = Color.parseColor("#1b4200");
-    //背景颜色
-    protected int mBackgroundColor = Color.BLACK;
-    //小网格的尺寸( w = h )
-    protected float mSGridSize;
+    protected Paint bgPaint; //背景画笔
+    protected int mSGridColor = Color.parseColor("#1b4200");//小网格颜色
+    protected int mBackgroundColor = Color.BLACK;   //背景颜色
+    protected float mSGridSize; //小网格的尺寸( w = h )
 
     public EcgView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -55,13 +56,25 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
         setZOrderMediaOverlay(true);
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        init();
+        Canvas canvas = holder.lockCanvas();
+        initBackground(canvas);
+        holder.unlockCanvasAndPost(canvas);
+        if (!isRunning) {
+            startThread();
+        }
+    }
+
     private void init() {
         // 初始化宽高 格子大小 x最小偏移值
         this.mWidth = getWidth();
         this.mSGridSize = (mWidth - 100) / 75;
         this.xOffset = (mWidth - 100) / this.XCOUNT;
         this.mHeight = mSGridSize * 205;
-        int d = this.SAMPLING_RATE / 60;
+        int SAMPLING_RATE = 300;//采样率
+        int d = SAMPLING_RATE / 60;
         if (d % 60 != 0) {
             d++;
         }
@@ -87,17 +100,6 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        init();
-        Canvas canvas = holder.lockCanvas();
-        initBackground(canvas);
-        holder.unlockCanvasAndPost(canvas);
-        if (!isRunning) {
-            startThread();
-        }
-    }
-
-    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         setZOrderOnTop(false);
         setZOrderMediaOverlay(false);
@@ -107,17 +109,6 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
         stopThread();
     }
-
-    @Override
-    public void computeScroll() {
-        super.computeScroll();
-    }
-
-    /**
-     * https://stackoverflow.com/questions/49492401/scrollview-with-custom-view-wont-scroll-android/49492814#49492814
-     *
-     * @param
-     */
 
     //开始画线
     private void startThread() {
@@ -133,14 +124,13 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
         if (isRunning) {
             isRunning = false;
             RunThread.interrupt();
-
         }
     }
 
     Runnable drawRunnable = new Runnable() {
         @Override
         public void run() {
-            List<EcgPoint> lastPoints = new ArrayList<EcgPoint>();
+            List<EcgPoint> lastPoints = new ArrayList<>();
             for (int i = 0; i < 12; i++) {
                 float y = (i + 1) * mSGridSize * 15;
                 lastPoints.add(new EcgPoint(xLoc * xOffset, y));
@@ -177,9 +167,9 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * 画曲线
      *
-     * @param mCanvas
-     * @param lastPoints
-     * @param count
+     * @param mCanvas    画布
+     * @param lastPoints 记录上次画的点
+     * @param count      每次画的个数
      */
     private void drawLines(Canvas mCanvas, List<EcgPoint> lastPoints, int count) {
         //画曲线
@@ -198,11 +188,10 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-
     /**
      * 添加数据
      *
-     * @param data
+     * @param data 心电数据
      */
     public static void addEcgData0(Float[] data) {
         ecg0Datas.offer(data);
@@ -211,8 +200,8 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * 将心电数据转换成用于显示的Y坐标
      *
-     * @param datas
-     * @return
+     * @param datas 心电数据
+     * @return float[]
      */
     private float[] ecgConver(Float[] datas) {
         float yOffset = mSGridSize * 15;
@@ -240,10 +229,12 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * 画文本
      */
+    private String[] mStrs;
+
     private void drawText(Canvas mCanvas) {
         float yOffset = mSGridSize * 15;
         for (int i = 0; i < 12; i++) {
-            String[] mStrs = new String[]{"I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"};
+            mStrs = new String[]{"I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"};
             for (int j = 0; j < 12; j++) {
                 float hOffset = 10;
                 float vOffset = (i + 1) * yOffset;
@@ -255,7 +246,7 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * 画网格背景
      *
-     * @param canvas
+     * @param canvas 画布
      */
     private void initBackground(Canvas canvas) {
         canvas.drawColor(mBackgroundColor);
@@ -304,7 +295,7 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
             // 绘制网格
             initBackground(canvas);
         } catch (Exception e) {
-
+            e.printStackTrace();
         } finally {
             if (canvas != null) {
                 surfaceHolder.unlockCanvasAndPost(canvas);
@@ -312,35 +303,4 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-//
-//    private static final String TAG = "Listener";
-//    private String temp = "默认值";
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//
-//        switch (event.getActionMasked()) {
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//                temp = "ACTION_POINTER_DOWN";
-//                break;
-//            case MotionEvent.ACTION_POINTER_UP:
-//                temp = "ACTION_POINTER_UP";
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                temp = "ACTION_UP";
-//                break;
-//            case MotionEvent.ACTION_DOWN:
-//                temp = "ACTION_DOWN";
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                temp = "ACTION_MOVE";
-//                break;
-//            default:
-//                temp = "默认值";
-//                break;
-//        }
-//        Log.d(TAG, "触发行为: " + temp);
-//        Log.d(TAG, "手指个数: " + event.getPointerCount());
-//        return false;
-//
-//    }
 }
