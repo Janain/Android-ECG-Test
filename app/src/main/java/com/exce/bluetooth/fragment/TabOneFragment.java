@@ -4,9 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.exce.bluetooth.R;
+import com.exce.bluetooth.activity.MainTabActivity;
 import com.exce.bluetooth.activity.ble.BLEActivity;
 import com.exce.bluetooth.activity.usb.USBActivity;
 import com.exce.bluetooth.bean.MyField;
@@ -32,6 +38,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -68,8 +75,11 @@ public class TabOneFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_home, container, false);
         init(mRootView);
         Untils.hideIputKeyboard(getContext());
+
         return mRootView;
     }
+
+
 
     /**
      * 绑定ID
@@ -106,6 +116,7 @@ public class TabOneFragment extends Fragment {
             return false;
         });
     }
+
 
     /**
      * 监听点击事件
@@ -169,6 +180,7 @@ public class TabOneFragment extends Fragment {
             }
             return "";
         }
+
     }
 
     /**
@@ -205,7 +217,7 @@ public class TabOneFragment extends Fragment {
                     // -------------判断帧类型-------------------------
                     // 帧类型
                     // TODO 判断帧类型，这里默认为数据
-                    if (buffer[0] != Untils.unsigned_byte(0x32)) continue;
+                    if (buffer[0] != Untils.unsigned_byte(0x30)) continue;
 
                     //--------以下为数据帧解析---------------
                     // 数据长度

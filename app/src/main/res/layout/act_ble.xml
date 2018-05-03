@@ -15,7 +15,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.ToolBar"
         app:popupTheme="@style/OverflowMenuStyle"
-        app:title="主页(WIFI)">
+        app:title="BLE">
 
     </android.support.v7.widget.Toolbar>
 
@@ -25,6 +25,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -49,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="采集信息" />
+                android:text="快速诊断 10s" />
         </LinearLayout>
     </LinearLayout>
 

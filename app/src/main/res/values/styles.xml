@@ -71,4 +71,13 @@
         <!-- 设置弹出菜单文字颜色 -->
         <item name="android:textColor">@color/black</item>
     </style>
+
+
+
+    <style name="GrayLineStyle_Ver">
+        <item name="android:background">@color/c14</item>
+        <item name="android:layout_width">5dp</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
 </resources>

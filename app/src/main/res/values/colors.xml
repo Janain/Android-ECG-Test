@@ -9,4 +9,12 @@
     <color name="gray">#eee</color>
     <color name="white">#ffff</color>
     <color name="black">#000000</color>
+
+
+    <color name="c25">#ff1ab993</color>
+    <color name="c20">#ff1fab11</color>
+    <color name="c14">@android:color/white</color>
+    <color name="c12">#fff16149</color>
+    <color name="c2">#fff74d30</color>
+    <color name="c15">#ff157efb</color>
 </resources>

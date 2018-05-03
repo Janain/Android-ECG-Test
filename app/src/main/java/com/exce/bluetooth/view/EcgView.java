@@ -297,9 +297,9 @@ public class EcgView extends SurfaceView implements SurfaceHolder.Callback {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (canvas != null) {
+//            if (canvas != null) {
                 surfaceHolder.unlockCanvasAndPost(canvas);
-            }
+//            }
         }
     }
 

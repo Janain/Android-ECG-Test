@@ -22,14 +22,14 @@ import java.util.List;
  * @Content
  */
 public class Server {
-    //协议头(2) + 总长度(2) + 帧类型(1) + 数据长度(2) + 数据(n) + 结束字(2)
+    //协议头 2 字节 总长度 2 字节 帧类型 2 字节 数据长度 2 字节 数据 2 字节 结束字 2 字节
     private static void genProtocol(DataOutputStream out, short data) throws IOException {
         // 数据
         byte[] dataBuffer = Shorts.toByteArray(data);
         List<Byte> sendList = new ArrayList<Byte>();
 
         //帧类型
-        byte type = 0x32;
+        byte type = 0x30;
         sendList.add(type);
 
         //数据长度
@@ -53,14 +53,14 @@ public class Server {
         //总长度 2
         short allLen = (short) (sendList.size());
         byte[] allArr = Shorts.toByteArray(allLen);
-        for (int i = allArr.length - 1; i >= 0; i--) {
+        for (int i = allArr.length-1; i >= 0 ; i--) {
             sendList.add(0, allArr[i]);
         }
 
         // 协议头 2
         byte head = 0xaa - 256;
-        sendList.add(0, head);
-        sendList.add(0, head);
+        sendList.add(0,head);
+        sendList.add(0,head);
 
         byte[] send = Bytes.toArray(sendList);
         //写入消息内容
@@ -89,10 +89,9 @@ public class Server {
             super.run();
             System.out.println("1连接......");
             OutputStream os = null;
-
             try {
-//                os = socket.getOutputStream();
-//                DataOutputStream outs = new DataOutputStream(os);
+                os = socket.getOutputStream();
+                DataOutputStream outs = new DataOutputStream(os);
                 String dataStr = readFileByLines(filename);
                 String[] dataStrArr = dataStr.split(",");
                 System.out.println("开始发送");
@@ -101,7 +100,7 @@ public class Server {
                 while (!sendover) {
                     for (String d : dataStrArr) {
                         count++;
-                        genProtocol(dos, Short.parseShort(d));
+                        genProtocol(outs, Short.parseShort(d));
 //                        Thread.sleep(10);
                         System.out.println("----------------data: " + d);
                     }
@@ -164,15 +163,15 @@ public class Server {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch ( Exception e1) {
+                } catch (IOException e1) {
                 }
             }
         }
         return readFileByLines(fileName);
     }
 
+
     public static void main(String[] args) {
         new Server().startServer();
     }
-
 }
