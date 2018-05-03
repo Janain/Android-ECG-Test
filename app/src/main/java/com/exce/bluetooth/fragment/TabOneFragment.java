@@ -1,12 +1,15 @@
 package com.exce.bluetooth.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -62,7 +65,7 @@ public class TabOneFragment extends Fragment {
     private Toolbar mToolBar;
     private TextView txtSend;
     private EditText editPort, editSendMsg;
-    private Button btnConn, btnClientSend;
+    private Button btnConn, btnClientSend,btnOpen;
     private MyBtnClicker myBtnClicker = new MyBtnClicker();
 
     //--------------------------------------------
@@ -90,8 +93,10 @@ public class TabOneFragment extends Fragment {
         editSendMsg = view.findViewById(R.id.edit_tcpClientSend);
         txtSend = view.findViewById(R.id.tv_send);
         btnConn = view.findViewById(R.id.btn_conn_wifi);
+        btnOpen = view.findViewById(R.id.btn_open_wifi);
         btnClientSend = view.findViewById(R.id.btn_tcpClientSend);
         btnConn.setOnClickListener(myBtnClicker);
+        btnOpen.setOnClickListener(myBtnClicker);
         btnClientSend.setOnClickListener(myBtnClicker);
         btnClientSend.setEnabled(false);
 
@@ -141,6 +146,12 @@ public class TabOneFragment extends Fragment {
 //                    myHandler.sendMessage(message);
 //                    exec.execute(() -> tcpClient.send(editSendMsg.getText().toString()));
                     break;
+                case R.id.btn_open_wifi://发送消息
+                    Intent intent =  new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(intent);
+                    break;
+                    default:
+                        break;
             }
         }
     }
