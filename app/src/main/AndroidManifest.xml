@@ -25,7 +25,7 @@
         <!--android:name=".activity.wifi.TcpClientActivity"-->
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:persistableMode="persistAcrossReboots"
             android:theme="@style/AppTheme.Notitle.FullScreen"
             tools:targetApi="lollipop">
@@ -35,10 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainTabActivity" />
-        <activity android:name=".activity.usb.USBActivity" />
-        <activity android:name=".activity.ble.BLEActivity" />
-        <activity android:name=".activity.PersonalActivity" />
+        <activity android:name=".ui.activity.MainTabActivity" />
+        <activity android:name=".ui.activity.usb.USBActivity" />
+        <activity android:name=".ui.activity.ble.BLEActivity" />
+        <activity android:name=".ui.activity.PersonalActivity" />
     </application>
 
 </manifest>
