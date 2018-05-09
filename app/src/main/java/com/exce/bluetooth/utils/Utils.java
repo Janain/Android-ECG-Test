@@ -18,7 +18,7 @@ import java.util.concurrent.BlockingQueue;
  * @Create 2018/4/9.
  * @Content
  */
-public class Untils {
+public class Utils {
     /**
      * 数组byte转int数据(大端)
      *

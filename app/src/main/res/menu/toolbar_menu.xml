@@ -8,5 +8,8 @@
         android:id="@+id/change_ble"
         android:orderInCategory="100"
         android:title="@string/ble_mode"/>
-
+    <item
+        android:id="@+id/change_wifi_config"
+        android:orderInCategory="100"
+        android:title="@string/wifi_config"/>
 </menu>

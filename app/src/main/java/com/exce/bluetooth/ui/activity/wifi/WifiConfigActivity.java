@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
  * @Create 2018/5/8  17:37.
  * @Title
  */
-public class WifiActivity extends AppCompatActivity {
+public class WifiConfigActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     public static Context context;
@@ -145,8 +145,8 @@ public class WifiActivity extends AppCompatActivity {
 
     @SuppressLint("HandlerLeak")
     private class MyHandler extends Handler {
-        private WeakReference<WifiActivity> mActivity;
-        MyHandler(WifiActivity activity) {
+        private WeakReference<WifiConfigActivity> mActivity;
+        MyHandler(WifiConfigActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/yellow"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.ToolBar"
+        app:popupTheme="@style/OverflowMenuStyle"
+        app:title="主页(WIFI模式)" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="本机ip:" />
+
+        <TextView
+            android:id="@+id/txt_Server_Ip"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="10.1.1.xxx" />
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="port:" />
+
+        <EditText
+            android:id="@+id/edit_Server_Port"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="12306" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_tcpServerConn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="开启" />
+
+        <Button
+            android:id="@+id/btn_tcpServerClose"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="关闭" />
+    </LinearLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.exce.bluetooth.view.EcgView
+                android:layout_width="match_parent"
+                android:layout_height="1000dp"
+                android:layout_margin="8dp" />
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

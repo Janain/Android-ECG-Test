@@ -25,10 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--android:name=".ui.activity.LoginActivity"-->
 
         <activity
-            android:name=".ui.activity.wifi.WifiActivity"
+            android:name=".ui.LoginActivity"
             android:persistableMode="persistAcrossReboots"
             android:theme="@style/AppTheme.Notitle.FullScreen"
             tools:targetApi="lollipop">
@@ -38,10 +37,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.wifi.WifiConfigActivity" />
         <activity android:name=".ui.MainTabActivity" />
         <activity android:name=".ui.PersonalActivity" />
         <activity android:name=".ui.activity.usb.USBActivity" />
         <activity android:name=".ui.activity.ble.BLEActivity" />
+
     </application>
 
 </manifest>
