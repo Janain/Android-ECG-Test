@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -22,10 +25,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--android:name=".activity.wifi.TcpClientActivity"-->
+        <!--android:name=".ui.activity.LoginActivity"-->
 
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.activity.wifi.WifiActivity"
             android:persistableMode="persistAcrossReboots"
             android:theme="@style/AppTheme.Notitle.FullScreen"
             tools:targetApi="lollipop">
@@ -35,10 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MainTabActivity" />
+        <activity android:name=".ui.MainTabActivity" />
+        <activity android:name=".ui.PersonalActivity" />
         <activity android:name=".ui.activity.usb.USBActivity" />
         <activity android:name=".ui.activity.ble.BLEActivity" />
-        <activity android:name=".ui.activity.PersonalActivity" />
     </application>
 
 </manifest>

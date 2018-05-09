@@ -18,13 +18,13 @@ import java.util.List;
  * @Create 2018/3/8.
  * @Content 蓝牙设备适配器处理
  */
-public class DeviceListAdapter extends BaseAdapter {
+public class BleListAdapter extends BaseAdapter {
     //设备列表
     public List<BluetoothDevice> mBleDevices;
     private List<Double> mRssis;
     private Context mContext;
 
-    public DeviceListAdapter(Context mContext) {
+    public BleListAdapter(Context mContext) {
         this.mContext = mContext;
         mBleDevices = new ArrayList<BluetoothDevice>();
         mRssis = new ArrayList<Double>();

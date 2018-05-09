@@ -33,7 +33,7 @@ import com.exce.bluetooth.ui.activity.usb.USBActivity;
 import com.exce.bluetooth.bean.MyField;
 import com.exce.bluetooth.bean.UserInfo;
 
-import com.exce.bluetooth.ui.adapter.DeviceListAdapter;
+import com.exce.bluetooth.ui.adapter.BleListAdapter;
 import com.exce.bluetooth.utils.MyObjIterator;
 import com.exce.bluetooth.utils.SharedPreferenceUtil;
 import com.exce.bluetooth.utils.Untils;
@@ -65,7 +65,7 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
     private TextView connState, sampTime;//连接设备tv
     private ImageButton btRefresh;//dialog 上的刷新按钮
     private Dialog dialog;  //点击设备弹出的dialog
-    private DeviceListAdapter dvAdapter; //dialog列表的适配器
+    private BleListAdapter dvAdapter; //dialog列表的适配器
     private BleController mBleController; //蓝牙工具类
     private String mDeviceAddress; //当前连接的mac地址
 
@@ -91,7 +91,7 @@ public class BLEActivity extends AppCompatActivity implements View.OnClickListen
         sampTime = findViewById(R.id.tv_sampling_time);
         mToolBar = findViewById(R.id.tool_bar);
         mBleController = BleController.getInstance().initble(this);
-        dvAdapter = new DeviceListAdapter(this);
+        dvAdapter = new BleListAdapter(this);
         btnDevice.setOnClickListener(this);
         btnDisconn.setOnClickListener(this);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");// HH:mm:ss
